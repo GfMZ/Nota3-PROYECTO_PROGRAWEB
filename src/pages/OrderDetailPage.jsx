@@ -2,7 +2,7 @@ import HeaderA from "../components/HeaderA";
 import OrderProductTable from "../components/OrderProductTable";
 
 export default function OrderDetailsPage() {
-  // Datos estáticos para la orden
+  
   const orderId = '#1234';
   const orderStatus = 'Entregado';
   const totalAmount = 'S/ 400.00';
@@ -15,7 +15,7 @@ export default function OrderDetailsPage() {
         fontFamily: "sans-serif",
       }}
     >
-      {/* Barra superior */}
+      
       <HeaderA />
 
       <main
@@ -25,7 +25,7 @@ export default function OrderDetailsPage() {
           padding: "32px 16px",
         }}
       >
-        {/* Título principal */}
+        
         <h1
           style={{
             fontSize: "24px",
@@ -37,7 +37,7 @@ export default function OrderDetailsPage() {
           Detalles de Órden
         </h1>
 
-        {/* Contenedor principal */}
+        
         <div
           style={{
             backgroundColor: "white",
@@ -47,7 +47,7 @@ export default function OrderDetailsPage() {
             borderTop: "2px solid #e5e7eb",
           }}
         >
-          {/* Header de la orden */}
+          
           <div
             style={{
               display: "flex",
@@ -116,7 +116,7 @@ export default function OrderDetailsPage() {
             </div>
           </div>
 
-          {/* Tabla de productos */}
+          
           <OrderProductTable />
         </div>
       </main>

@@ -13,7 +13,7 @@ const theme = {
     shadowMd: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
 };
 
-// --- HeaderA Component (Con Estilos en Línea) ---
+
 export default function HeaderA() {
     const styles = {
         wrapper: {
@@ -128,7 +128,7 @@ export default function HeaderA() {
 
     return (
         <header style={styles.wrapper}>
-            {/* Top Bar */}
+            
             <div style={styles.topBar}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     {/* Logo */}
@@ -137,7 +137,7 @@ export default function HeaderA() {
                     </div>
                 </div>
                 
-                {/* Search Bar */}
+                
                 <div style={styles.searchContainer}>
                     <input 
                         type="search" 
@@ -147,14 +147,14 @@ export default function HeaderA() {
                     <Search size={18} style={styles.searchIcon} />
                 </div>
 
-                {/* Actions */}
+                
                 <div style={styles.actions}>
-                    {/* Cart Button */}
+                    
                     <div style={styles.cartBtn}>
                         <ShoppingCart size={20} style={styles.cartIcon} />
                         <span>Carrito S/ 00.00</span>
                     </div>
-                    {/* User Button */}
+                    
                     <div style={styles.userAction}>
                         <div style={styles.userActionInner}>
                             <User size={18} style={styles.userIcon} /> Usuario
@@ -164,7 +164,7 @@ export default function HeaderA() {
                 </div>
             </div>
             
-            {/* Nav Bar (Green) */}
+           
             <nav style={styles.navBar}>
                 <ul style={styles.navList}>
                     <li style={styles.navItem}>

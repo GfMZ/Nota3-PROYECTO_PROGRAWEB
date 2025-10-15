@@ -1,6 +1,5 @@
 import React from 'react';
 
-// --- DEFINICIÓN DE TEMA LOCAL ---
 const theme = {
     green: '#2e9b1f', 
     dark: '#1f2937', 
@@ -11,29 +10,29 @@ const theme = {
     shadowXl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', 
 };
 
-// --- Definición de Estilos (Objetos JS) ---
+
 const itemStyles = {
-    // Clases base para el contenedor de cada detalle (simula mb-2)
+    
     container: {
         marginBottom: '8px', 
         display: 'block', 
     },
-    // Etiqueta (Label)
+    
     label: {
         fontSize: '16px', 
-        color: theme.gray900, // Etiqueta oscura
+        color: theme.gray900, 
         fontWeight: 'normal',
         marginRight: '8px',
         display: 'inline', 
     },
-    // Valor (Value)
+    
     valueBase: {
         fontSize: '16px',
-        fontWeight: 'normal', // Valor normal para que destaque la etiqueta
+        fontWeight: 'normal', 
         color: theme.gray900, 
         display: 'inline',
     },
-    // Link (como Correo)
+    
     link: {
         fontSize: '16px',
         fontWeight: 'normal',
@@ -41,7 +40,7 @@ const itemStyles = {
         textDecoration: 'underline',
         cursor: 'pointer',
     },
-    // Status (Activo/Inactivo)
+    
     status: {
         fontSize: '16px',
         fontWeight: 'normal',
@@ -50,7 +49,7 @@ const itemStyles = {
 };
 
 const cardStyles = {
-    // Clases para el componente principal
+    
     card: {
         backgroundColor: 'white',
         padding: '32px', 
@@ -63,7 +62,7 @@ const cardStyles = {
         alignItems: 'flex-start',
         marginBottom: '24px', 
     },
-    // Estilo del nombre de usuario para que sea el encabezado principal
+    
     userNameTitle: {
         fontSize: '32px', 
         fontWeight: '700', 
@@ -80,14 +79,14 @@ const cardStyles = {
         height: '160px', 
         borderRadius: '50%', 
         objectFit: 'cover',
-        border: `4px solid ${theme.borderColor}`, // Borde simple, más discreto
+        border: `4px solid ${theme.borderColor}`, 
         boxShadow: theme.shadowXl, 
         margin: '0 auto', 
     },
 };
 
 
-// --- Subcomponente DetailItem ---
+
 const DetailItem = ({ label, value, isLink = false, isStatus = false }) => {
     let ValueElement;
 
@@ -111,7 +110,7 @@ const DetailItem = ({ label, value, isLink = false, isStatus = false }) => {
         );
     }
 
-    // Estructura para mostrar la etiqueta y el valor en la misma línea
+    
     return (
         <div style={itemStyles.container}>
             <span style={itemStyles.label}>
@@ -122,13 +121,13 @@ const DetailItem = ({ label, value, isLink = false, isStatus = false }) => {
     );
 };
 
-// --- UserDetailCard Component (Contenido de la Caja Blanca) ---
+
 export default function UserDetailCard({ user }) {
     
     return (
         <div style={cardStyles.card}>
             
-            {/* Detalles del Usuario (Izquierda) */}
+            
             <div style={{ flex: 1, marginRight: '40px' }}>
                 <h2 style={cardStyles.userNameTitle}>
                     {user.name} 
@@ -140,7 +139,7 @@ export default function UserDetailCard({ user }) {
 
             </div>
 
-            {/* Imagen de Perfil (Derecha) */}
+           
             <div style={cardStyles.imageContainer}>
                 <img 
                     src={user.imageUrl} 

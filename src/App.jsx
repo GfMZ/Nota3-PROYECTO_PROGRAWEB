@@ -4,7 +4,7 @@ import CategoryListAdmin from './pages/CategoryListAdmin';
 import UserDetailsPage from './pages/UserDetailsPage';
 import OrderDetailsPage from './pages/OrderDetailPage';
 function App() {
-  return <CategoryListAdmin />;
+  return <UserDetailsPage />;
 }
 
 export default App;

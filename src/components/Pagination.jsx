@@ -22,7 +22,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
 
     const activePageButtonStyles = {
         ...pageButtonStyles,
-        backgroundColor: '#4CAF50', // Verde activo
+        backgroundColor: '#4CAF50', 
         color: 'white',
         borderColor: '#4CAF50'
     };
@@ -34,7 +34,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
 
     const generatePageNumbers = () => {
         const pages = [];
-        // Simplemente genera hasta 10 páginas como en la imagen
+        
         for (let i = 1; i <= Math.min(totalPages, 10); i++) {
             pages.push(
                 <button

@@ -16,7 +16,7 @@ export default function SideMenuA({ activeTab, onTabChange }) {
     const getLinkStyle = (tabName) => {
         const isActive = activeTab === tabName;
         
-        // Si, me canse d intentar ponerlo en el CSS Global
+        
         const baseStyle = {
             display: 'flex',
             alignItems: 'center',

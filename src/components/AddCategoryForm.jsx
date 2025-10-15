@@ -1,10 +1,10 @@
-// ./components/AddCategoryForm.jsx
+
 import React, { useState } from 'react';
 
-// Se recibe 'isOpen' para mostrar/ocultar y 'onClose' para cerrar la modal.
+
 export default function AddCategoryForm({ isOpen, onClose, onSave }) {
     
-    // Si la modal no debe estar visible, no renderizamos nada.
+    
     if (!isOpen) return null;
 
     const [categoryName, setCategoryName] = useState('');
@@ -18,24 +18,24 @@ export default function AddCategoryForm({ isOpen, onClose, onSave }) {
             description: categoryDescription 
         });
         
-        // Limpiar el formulario y cerrar la modal
+        
         setCategoryName('');
         setCategoryDescription('');
         onClose(); 
     };
 
-    // --- Estilos de la Modal ---
+    
     const modalOverlayStyles = {
         position: 'fixed',
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo semitransparente oscuro
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        zIndex: 1000 // Asegura que esté por encima de todo
+        zIndex: 1000 
     };
 
     const modalContentStyles = {
@@ -91,9 +91,9 @@ export default function AddCategoryForm({ isOpen, onClose, onSave }) {
                 </h2>
                 
                 <form onSubmit={handleSubmit}>
-                    {/* ... (Campos Nombre y Descripción) ... */}
                     
-                    {/* Campo Nombre */}
+                    
+                    
                     <label htmlFor="categoryName" style={inputLabelStyles}>Nombre</label>
                     <input
                         id="categoryName"
@@ -105,7 +105,7 @@ export default function AddCategoryForm({ isOpen, onClose, onSave }) {
                         style={textInputStyles}
                     />
 
-                    {/* Campo Descripción */}
+                    
                     <label htmlFor="categoryDescription" style={inputLabelStyles}>Descripción</label>
                     <textarea
                         id="categoryDescription"
@@ -116,7 +116,7 @@ export default function AddCategoryForm({ isOpen, onClose, onSave }) {
                         style={descriptionInputStyles}
                     />
                     
-                    {/* Botón de Acción */}
+                   
                     <button type="submit" style={buttonStyles}>
                         <span style={{ fontSize: '18px', marginRight: '8px' }}>&#x2713;</span>
                         Crear categoría
