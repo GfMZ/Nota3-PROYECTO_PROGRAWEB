@@ -1,146 +1,228 @@
 import React, { useState } from 'react';
+import { Lock, X } from 'lucide-react';
 
-const ChangePasswordModal = ({ isOpen, onClose, onSave }) => {
-    
-    // Estado local para los campos del formulario
-    const [currentPassword, setCurrentPassword] = useState('');
+// =========================================================================
+// DEFINICIÓN DE ESTILOS BASE Y HOVER PARA INPUTS Y BOTONES (PURAS PROPIEDADES CSS)
+// =========================================================================
+
+// Estilo de los campos de input
+const inputStyle = {
+    width: '100%',
+    padding: '0.5rem',
+    border: '1px solid #D1D5DB', // border-gray-300
+    borderRadius: '0.5rem', // rounded-lg
+    outline: 'none',
+    transition: 'border-color 150ms, box-shadow 150ms',
+    // Aseguramos que el foco también se maneje con estilo en línea
+    // Nota: El foco requiere un manejo avanzado con React si el navegador no lo soporta automáticamente
+    // Aquí solo definimos el estilo base
+};
+
+// Estilos del botón de GUARDAR (Verde)
+const saveButtonStyleBase = {
+    backgroundColor: '#059669', // green-600
+    color: 'white',
+    fontWeight: '600', // font-semibold
+    padding: '0.5rem 1rem',
+    borderRadius: '0.5rem',
+    transition: 'background-color 150ms',
+    boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+    cursor: 'pointer',
+    border: 'none',
+};
+const saveButtonStyleHover = {
+    backgroundColor: '#047857', // hover:bg-green-700
+};
+
+// Estilos del botón de CANCELAR (Gris)
+const cancelButtonStyleBase = {
+    backgroundColor: '#9CA3AF', // gray-400
+    color: 'white',
+    fontWeight: '600', // font-semibold
+    padding: '0.5rem 1rem',
+    borderRadius: '0.5rem',
+    transition: 'background-color 150ms',
+    cursor: 'pointer',
+    border: 'none',
+};
+const cancelButtonStyleHover = {
+    backgroundColor: '#6B7280', // hover:bg-gray-500
+};
+
+// Estilo del contenedor principal de la modal (CRÍTICO para la superposición)
+const modalContainerStyle = {
+    position: 'fixed', // Esto asegura que se posicione respecto al viewport
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // bg-black bg-opacity-50
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 9999, // Aumentado el z-index para asegurar la superposición total
+    padding: '1rem',
+};
+
+// Estilo del contenido interno de la modal
+const modalContentStyle = {
+    backgroundColor: 'white',
+    padding: '2rem',
+    borderRadius: '0.75rem', // rounded-xl
+    width: '100%',
+    maxWidth: '28rem', // max-w-md
+    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', // shadow-2xl
+    position: 'relative',
+};
+
+export default function ChangePasswordModal({ isOpen, onClose, onSave }) {
+    const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
-    const [confirmNewPassword, setConfirmNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState('');
+    const [statusMessage, setStatusMessage] = useState(null);
+    
+    // Estados para el manejo de hover en los botones
+    const [isSaveHovered, setIsSaveHovered] = useState(false);
+    const [isCancelHovered, setIsCancelHovered] = useState(false);
+    // Estado para el hover en el botón de cerrar (X)
+    const [isCloseHovered, setIsCloseHovered] = useState(false);
 
-    if (!isOpen) {
-        return null;
+
+    if (!isOpen) return null;
+
+    const handleSave = (e) => {
+        e.preventDefault();
+        setError('');
+        setStatusMessage(null);
+
+        if (newPassword !== confirmPassword) {
+            setError('Las nuevas contraseñas no coinciden.');
+            return;
+        }
+        if (newPassword.length < 8) {
+            setError('La nueva contraseña debe tener al menos 8 caracteres.');
+            return;
+        }
+
+        onSave({ oldPassword, newPassword });
+        setStatusMessage('Contraseña cambiada exitosamente (simulado).');
+        setOldPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+        
+        // Cierra la modal después de un breve retraso
+        setTimeout(onClose, 1500);
+    };
+    
+    // Estilos dinámicos para los botones (combina base + hover si es necesario)
+    const dynamicSaveStyle = {
+        ...saveButtonStyleBase,
+        ...(isSaveHovered ? saveButtonStyleHover : {}),
+    };
+    const dynamicCancelStyle = {
+        ...cancelButtonStyleBase,
+        ...(isCancelHovered ? cancelButtonStyleHover : {}),
+    };
+    
+    // Estilos para los mensajes de error/éxito
+    const errorMsgStyle = { backgroundColor: '#FEE2E2', color: '#B91C1C', padding: '0.75rem', borderRadius: '0.5rem', marginBottom: '1rem', fontSize: '0.875rem', fontWeight: '500' };
+    const successMsgStyle = { backgroundColor: '#D1FAE5', color: '#047857', padding: '0.75rem', borderRadius: '0.5rem', marginBottom: '1rem', fontSize: '0.875rem', fontWeight: '500' };
+    
+    // Estilo del botón de cerrar (X)
+    const closeButtonStyleBase = { 
+        position: 'absolute', 
+        top: '1rem', 
+        right: '1rem', 
+        color: '#9CA3AF', 
+        cursor: 'pointer', 
+        transition: 'color 150ms',
+        backgroundColor: 'transparent',
+        border: 'none',
+        padding: 0,
+    };
+    const closeButtonStyleHover = {
+        color: '#4B5563', // hover:text-gray-600
     }
 
-    // --- ESTILOS (Reutilizados de AddCategoryForm) ---
-    const modalOverlayStyles = { /* ... estilos ... */ };
-    const modalContentStyles = { 
-        backgroundColor: 'white',
-        padding: '30px',
-        borderRadius: '8px',
-        width: '100%',
-        maxWidth: '450px', // Hacemos la modal un poco más estrecha
-        boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)'
-    };
-    const titleStyles = { /* ... estilos ... */ };
-    const labelStyles = { /* ... estilos ... */ };
-    const inputStyles = { /* ... estilos ... */ };
-    const saveButtonStyles = { /* ... estilos ... */ };
-    const footerStyles = { /* ... estilos ... */ };
-    
-    // (Añade o importa los estilos de la modal de tu AddCategoryForm aquí)
-    const getModalBaseStyles = () => ({
-        modalOverlayStyles: {
-            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.5)', display: 'flex', 
-            alignItems: 'center', justifyContent: 'center', zIndex: 1000
-        },
-        titleStyles: {
-            fontSize: '20px', fontWeight: 'bold', marginBottom: '25px', 
-            borderBottom: '1px solid #eee', paddingBottom: '15px'
-        },
-        labelStyles: {
-            display: 'block', fontSize: '14px', fontWeight: 'bold', 
-            marginBottom: '8px', color: '#333'
-        },
-        inputStyles: {
-            width: '100%', padding: '10px 12px', marginBottom: '20px', 
-            border: '1px solid #ccc', borderRadius: '5px', 
-            boxSizing: 'border-box', fontSize: '14px'
-        },
-        saveButtonStyles: {
-            backgroundColor: '#4CAF50', color: 'white', border: 'none', 
-            borderRadius: '5px', padding: '10px 15px', cursor: 'pointer', 
-            fontSize: '16px', fontWeight: 'bold', display: 'flex', 
-            alignItems: 'center', justifyContent: 'center', float: 'right'
-        },
-        footerStyles: {
-            paddingTop: '15px', overflow: 'hidden'
-        }
-    });
 
-    const styles = getModalBaseStyles();
-
-    // --- FUNCIÓN DE MANEJO DE ENVÍO ---
-    const handleSubmit = (event) => {
-        event.preventDefault();
-
-        if (!currentPassword || !newPassword || !confirmNewPassword) {
-            alert("Por favor, rellena todos los campos.");
-            return;
-        }
-
-        if (newPassword !== confirmNewPassword) {
-            alert("La nueva contraseña y la confirmación no coinciden.");
-            return;
-        }
-        
-        if (newPassword === currentPassword) {
-            alert("La nueva contraseña debe ser diferente a la actual.");
-            return;
-        }
-
-        onSave({ 
-            currentPassword: currentPassword, 
-            newPassword: newPassword 
-        });
-
-        // Limpiar formulario al guardar
-        setCurrentPassword('');
-        setNewPassword('');
-        setConfirmNewPassword('');
-    };
-
-    // --- RENDERIZADO DEL COMPONENTE ---
     return (
-        <div style={styles.modalOverlayStyles} onClick={onClose}>
-            <div style={modalContentStyles} onClick={(e) => e.stopPropagation()}> 
+        <div style={modalContainerStyle}>
+            <div style={modalContentStyle}>
                 
-                <form onSubmit={handleSubmit}>
-                    <div style={styles.titleStyles}>Cambiar contraseña</div>
+                {/* Botón de cerrar (X) con manejo de hover en línea */}
+                <button 
+                    onClick={onClose} 
+                    style={{ ...closeButtonStyleBase, ...(isCloseHovered ? closeButtonStyleHover : {}) }}
+                    onMouseEnter={() => setIsCloseHovered(true)}
+                    onMouseLeave={() => setIsCloseHovered(false)}
+                >
+                    <X size={24} />
+                </button>
+                
+                {/* Título de la modal */}
+                <h2 style={{ marginBottom: '1.5rem', fontSize: '1.5rem', fontWeight: '700', color: '#1F2937', display: 'flex', alignItems: 'center' }}>
+                    <Lock size={20} style={{ marginRight: '0.5rem', color: '#059669' }} /> Cambiar Contraseña
+                </h2>
 
-                    {/* Contraseña Actual */}
-                    <label htmlFor="currentPassword" style={styles.labelStyles}>Contraseña actual</label>
-                    <input
-                        id="currentPassword"
-                        type="password"
-                        placeholder="Contraseña actual"
-                        style={styles.inputStyles}
-                        value={currentPassword}
-                        onChange={(e) => setCurrentPassword(e.target.value)}
-                    />
+                {/* Mensajes de estado/error */}
+                {error && <div style={errorMsgStyle}>{error}</div>}
+                {statusMessage && <div style={successMsgStyle}>{statusMessage}</div>}
 
-                    {/* Nueva Contraseña */}
-                    <label htmlFor="newPassword" style={styles.labelStyles}>Nueva contraseña</label>
-                    <input
-                        id="newPassword"
-                        type="password"
-                        placeholder="Mínimo 8 caracteres"
-                        style={styles.inputStyles}
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                    />
+                <form onSubmit={handleSave}>
+                    <div style={{ marginBottom: '1rem' }}>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', fontSize: '0.875rem', color: '#374151' }}>Contraseña Antigua</label>
+                        <input
+                            type="password"
+                            value={oldPassword}
+                            onChange={(e) => setOldPassword(e.target.value)}
+                            style={inputStyle}
+                            required
+                        />
+                    </div>
+                    <div style={{ marginBottom: '1rem' }}>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', fontSize: '0.875rem', color: '#374151' }}>Nueva Contraseña</label>
+                        <input
+                            type="password"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            style={inputStyle}
+                            required
+                        />
+                    </div>
+                    <div style={{ marginBottom: '1.5rem' }}>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', fontSize: '0.875rem', color: '#374151' }}>Confirmar Nueva Contraseña</label>
+                        <input
+                            type="password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            style={inputStyle}
+                            required
+                        />
+                    </div>
 
-                    {/* Confirmar Nueva Contraseña */}
-                    <label htmlFor="confirmNewPassword" style={styles.labelStyles}>Confirmar nueva contraseña</label>
-                    <input
-                        id="confirmNewPassword"
-                        type="password"
-                        placeholder="Repite la nueva contraseña"
-                        style={styles.inputStyles}
-                        value={confirmNewPassword}
-                        onChange={(e) => setConfirmNewPassword(e.target.value)}
-                    />
-
-                    {/* Footer y Botón de Acción */}
-                    <div style={styles.footerStyles}>
-                        <button type="submit" style={styles.saveButtonStyles}>
-                             <span style={{ marginRight: '5px' }}>&#x2713;</span> Guardar cambios
+                    {/* Botones de acción con estilos dinámicos */}
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
+                        <button 
+                            type="button" 
+                            onClick={onClose} 
+                            style={dynamicCancelStyle}
+                            onMouseEnter={() => setIsCancelHovered(true)}
+                            onMouseLeave={() => setIsCancelHovered(false)}
+                        >
+                            Cancelar
+                        </button>
+                        <button 
+                            type="submit" 
+                            style={dynamicSaveStyle}
+                            onMouseEnter={() => setIsSaveHovered(true)}
+                            onMouseLeave={() => setIsSaveHovered(false)}
+                        >
+                            Guardar Cambios
                         </button>
                     </div>
                 </form>
             </div>
         </div>
     );
-};
-
-export default ChangePasswordModal;
+}
