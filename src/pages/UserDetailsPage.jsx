@@ -38,36 +38,33 @@ const headerContainerStyle = {
 
 // Estilo del texto h1
 const titleStyle = {
-    fontSize: '1.875rem', // text-3xl
-    fontWeight: '800', // font-extrabold
-    color: '#1F2937', // text-gray-800
+    fontSize: '1.875rem', 
+    fontWeight: '800', 
+    color: '#1F2937', 
 };
 
 const changePasswordButtonStyle = {
-    backgroundColor: '#2563EB', // blue-600
+    backgroundColor: '#2563EB', 
     color: 'white',
-    fontWeight: '600', // font-semibold
-    paddingTop: '0.5rem', // py-2
-    paddingBottom: '0.5rem', // py-2
-    paddingLeft: '1rem', // px-4
-    paddingRight: '1rem', // px-4
-    borderRadius: '0.5rem', // rounded-lg
-    fontSize: '0.875rem', // text-sm
+    fontWeight: '600', 
+    paddingTop: '0.5rem', 
+    paddingBottom: '0.5rem', 
+    paddingLeft: '1rem', 
+    paddingRight: '1rem', 
+    borderRadius: '0.5rem', 
+    fontSize: '0.875rem', 
     display: 'flex',
     alignItems: 'center',
-    transition: 'background-color 150ms', // transition duration-150
-    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)', // shadow-md
+    transition: 'background-color 150ms', 
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)', 
     cursor: 'pointer',
-    // Estilo de hover (se debe manejar con un estado o :hover en CSS, 
-    // pero para compatibilidad con JS Style solo podemos definir el base)
     ':hover': { 
-        backgroundColor: '#1D4ED8', // hover:bg-blue-700
+        backgroundColor: '#1D4ED8', 
     }
 };
 
 
-export default function UserDetailsPage() { // Renombrado a UserDetailsPage
-    
+export default function UserDetailsPage() { 
     // ESTADOS
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false); 
     
@@ -76,22 +73,19 @@ export default function UserDetailsPage() { // Renombrado a UserDetailsPage
     const handleClosePasswordModal = () => setIsPasswordModalOpen(false);
 
     const handleChangePassword = (passwords) => {
-        // Lógica real de API para cambiar contraseña
+        //----------------------------Cambiar contraseña----------------------------------------
         console.log("API CALL: Cambiando contraseña para el usuario:", mockUser.id);
         console.log("Contraseña Antigua:", passwords.oldPassword);
         console.log("Nueva Contraseña:", passwords.newPassword);
     };
     
     const handleEditUser = () => {
-        // Simulación: Iniciar edición de datos de usuario 
         console.log("Simulación: Iniciar edición de datos del usuario...");
-        // En un entorno real, aquí navegarías a un formulario de edición.
     };
 
     return (
         <div className="min-h-screen bg-gray-100 font-sans">
             
-            {/* Componente Header */}
             <HeaderA /> 
             
             <div>
@@ -108,7 +102,6 @@ export default function UserDetailsPage() { // Renombrado a UserDetailsPage
                         </button>
                     </div>
 
-                    {/* CONTENIDO PRINCIPAL: Tarjeta y Tabla */}
                     <div style={{ paddingLeft: '2rem', paddingRight: '2rem' }}> 
                         <UserDetailCard user={mockUser} onEdit={handleEditUser} /> 
                         <UserOrdersTable orders={mockOrders} /> 
