@@ -1,7 +1,23 @@
 // CategoryTable.jsx
 import React from 'react';
 
-const CategoryTable = ({ categories }) => {
+const CategoryTable = ({ categories, searchTerm, setSearchTerm, onAddCategoryClick, onDeleteCategory }) => {
+
+    const handleSearchChange = (event) => {  
+        setSearchTerm(event.target.value); 
+    };
+
+    
+
+    const handleDeleteClick = (categoryId) => {
+        //-------------------------ALERTA DE CONFIRMACIÓN------------------------------------
+        if (window.confirm('¿Estás seguro de que quieres eliminar esta categoría?')) {
+            if (onDeleteCategory) {
+                 onDeleteCategory(categoryId);
+            }
+        }
+    };
+
     const tableContainerStyles = {
         flexGrow: 1,
         padding: '20px',
@@ -89,9 +105,12 @@ const CategoryTable = ({ categories }) => {
                         type="text"
                         placeholder="Buscar un producto..."
                         style={searchInputStyles}
+
+                        value={searchTerm}       // 1. Muestra el valor del estado
+                        onChange={handleSearchChange} 
                     />
                 </div>
-                <button style={addButtonStyles}>
+                <button style={addButtonStyles} onClick={onAddCategoryClick} >
                     <span style={{ fontSize: '20px', marginRight: '5px' }}>&#x271A;</span> {/* Cruz/Más */}
                     Agregar categoría
                 </button>
@@ -112,7 +131,7 @@ const CategoryTable = ({ categories }) => {
                             <td style={tdStyles}>{category.description}</td>
                             <td style={tdStyles}>
                                 <span style={actionIconStyles} title="Editar">&#9998;</span> {/* Lápiz */}
-                                <span style={actionIconStyles} title="Eliminar">🗑️</span> {/* Bote de basura */}
+                                <span style={actionIconStyles} title="Eliminar" onClick={() => handleDeleteClick(category.id)} >🗑️</span> {/* Bote de basura */}
                             </td>
                         </tr>
                     ))}
