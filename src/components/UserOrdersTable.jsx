@@ -28,7 +28,7 @@ const styles = {
     width: '100%',
     maxWidth: '100%',     // evita que se desborde horizontalmente
     boxSizing: 'border-box', // incluye los bordes y padding en el ancho total
-    },
+},
 
     title: {
         fontSize: '24px', // text-2xl

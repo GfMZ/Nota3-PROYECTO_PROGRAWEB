@@ -1,6 +1,6 @@
 // CategoryListAdmin.jsx
 import React, { useState, useMemo } from 'react';
-import Header from '../components/Header';
+import HeaderA from '../components/HeaderA';
 import SideMenu from '../components/SideMenu';
 import CategoryTable from '../components/CategoryTable';
 import Pagination from '../components/Pagination';
@@ -85,7 +85,7 @@ export default function CategoryListAdmin() {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw', margin: 0, padding: 0 }}>
-            <Header />
+            <HeaderA />
             <div style={mainLayoutStyles}>
                 <SideMenu />
                 <div style={contentAreaStyles}>
