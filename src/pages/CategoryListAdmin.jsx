@@ -10,6 +10,7 @@ export default function CategoryListAdmin() {
 
     const [isModalOpen, setIsModalOpen] = useState(false); 
 
+    // CAMBIO 1: Se añade 'setCategories' para poder actualizar la lista
     const [categories, setCategories] = useState([ 
         { id: 1, name: 'Videojuegos', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ...' },
         { id: 2, name: 'Consolas', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ...' },
@@ -27,12 +28,9 @@ export default function CategoryListAdmin() {
     const filteredCategories = useMemo(() => {
         if (!searchTerm) return categories;
         const lowerCaseSearch = searchTerm.toLowerCase();
-
         return categories.filter(category => (
             String(category.id).includes(lowerCaseSearch) ||
-
             category.name.toLowerCase().includes(lowerCaseSearch) ||
-            
             category.description.toLowerCase().includes(lowerCaseSearch)
         ));
     }, [categories, searchTerm]);
@@ -43,11 +41,14 @@ export default function CategoryListAdmin() {
         }
     };
     
+    // Funciones para la Modal
     const handleOpenModal = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
 
 
+//-------------------------------AÑADIR-----------------------------------------
     const handleAddCategory = (newCategoryData) => {
+
         const newId = categories.length > 0 ? categories[categories.length - 1].id + 1 : 1;
         
         const newCategory = { 
@@ -56,11 +57,15 @@ export default function CategoryListAdmin() {
             description: newCategoryData.description 
         };
         
+        // Actualizar
         setCategories(prevCategories => [...prevCategories, newCategory]);
     };
+//-------------------------------ELIMINAR-----------------------------------------
 
     const handleDeleteCategory = (categoryId) => {
+        // Actualizar
         setCategories(prevCategories => 
+            // Filtramos la lista, manteniendo solo las categorías cuyo ID no coincida
             prevCategories.filter(category => category.id !== categoryId)
         );
     };
@@ -89,8 +94,7 @@ export default function CategoryListAdmin() {
                         searchTerm={searchTerm} 
                         setSearchTerm={setSearchTerm} 
                         onAddCategoryClick={handleOpenModal} 
-                        // CAMBIO CLAVE: Enviamos la función de eliminación
-                        onDeleteCategory={handleDeleteCategory} 
+                        onDeleteCategory={handleDeleteCategory}
                     />
                     <Pagination
                         currentPage={currentPage}
@@ -103,7 +107,7 @@ export default function CategoryListAdmin() {
             <AddCategoryForm 
                 isOpen={isModalOpen} 
                 onClose={handleCloseModal} 
-                onSave={handleAddCategory}
+                onSave={handleAddCategory} 
             />
         </div>
     );
