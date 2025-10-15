@@ -3,9 +3,9 @@ import React from 'react';
 // Componente para renderizar una fila de producto
 export default function OrderProductRow({ id, name, category, quantity, total, imageUrl }) {
   return (
-    <tr className="border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition">
+    <tr className=" border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition">
       
-      {/* ID (con imagen y código) */}
+      
       <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-800 flex items-center">
         <img
           src={imageUrl}
