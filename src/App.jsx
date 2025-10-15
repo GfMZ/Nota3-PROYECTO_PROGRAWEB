@@ -1,9 +1,9 @@
 import React from 'react';
 import Home from './pages/Home';
+import CategoryListAdmin from './pages/CategoryListAdmin';
 import './styles.css';
-
 function App() {
-  return <Home />;
+  return <CategoryListAdmin />;
 }
 
 export default App;
