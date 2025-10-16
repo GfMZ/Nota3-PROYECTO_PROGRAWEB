@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-// --- DEFINICIÓN DE TEMA LOCAL ---
 const theme = {
     green: '#2e9b1f',
     greenDark: '#227a17',
-    blue: '#3b82f6', // Usado para enlaces de ID
+    blue: '#3b82f6',
     white: '#ffffff',
     gray50: '#f9fafb',
     gray100: '#f3f4f6',
@@ -16,9 +16,7 @@ const theme = {
     shadowMd: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06)',
 };
 
-// --- Definición de Estilos (Objetos JS) ---
 const styles = {
-    // Contenedor Principal
     wrapper: {
     backgroundColor: theme.white,
     padding: '24px',
@@ -26,31 +24,27 @@ const styles = {
     boxShadow: theme.shadowMd,
     border: `1px solid ${theme.gray200}`,
     width: '100%',
-    maxWidth: '100%',     // evita que se desborde horizontalmente
-    boxSizing: 'border-box', // incluye los bordes y padding en el ancho total
+    maxWidth: '100%',
+    boxSizing: 'border-box',
 },
-
     title: {
-        fontSize: '24px', // text-2xl
-        fontWeight: 700, // font-bold
-        marginBottom: '20px', // mb-5
+        fontSize: '24px',
+        fontWeight: 700,
+        marginBottom: '20px',
         color: theme.gray800,
     },
-    // Contenedor de la Tabla (para scroll horizontal en móvil)
     tableWrapper: {
         overflowX: 'auto',
-        // Asegura que la tabla no tenga padding lateral y se extienda al 100%
     },
     table: {
         minWidth: '100%',
         width: '100%',
         borderCollapse: 'collapse',
-        fontSize: '14px', // text-sm
+        fontSize: '14px',
         border: `1px solid ${theme.gray200}`,
         borderRadius: '8px',
-        overflow: 'hidden', // Para que el border radius aplique bien
+        overflow: 'hidden',
     },
-    // Encabezado de la Tabla (<thead>)
     tableHeader: {
         backgroundColor: theme.gray50,
         borderBottom: `1px solid ${theme.gray200}`,
@@ -67,7 +61,6 @@ const styles = {
     thCenter: {
         textAlign: 'center',
     },
-    
     tr: {
         backgroundColor: theme.white,
         borderBottom: `1px solid ${theme.gray200}`,
@@ -82,7 +75,6 @@ const styles = {
         color: theme.gray800,
         border: 'none', 
     },
-    
     idLink: {
         color: theme.green,
         fontWeight: 700,
@@ -99,7 +91,6 @@ const styles = {
     actionCenter: {
         textAlign: 'center',
     },
-    // Botón de Acción
     actionButton: {
         backgroundColor: theme.green,
         color: theme.white,
@@ -115,7 +106,6 @@ const styles = {
     actionButtonHover: {
         backgroundColor: theme.greenDark,
     },
-    
     paginationWrapper: {
         display: 'flex',
         justifyContent: 'flex-end',
@@ -123,7 +113,6 @@ const styles = {
         marginTop: '20px', 
         gap: '8px', 
     },
-    
     navButton: {
         padding: '8px', 
         color: theme.gray600,
@@ -139,7 +128,6 @@ const styles = {
         opacity: 0.5,
         cursor: 'default',
     },
-    
     pageButton: {
         width: '32px', 
         height: '32px', 
@@ -169,11 +157,9 @@ const styles = {
     }
 };
 
-
 export default function UserOrdersTable() {
     
     const [currentPage, setCurrentPage] = useState(1);
-    
     
     const simulatedOrders = [
         { id: '#1234', date: '20/01/2025', total: 199.00 },
@@ -184,7 +170,6 @@ export default function UserOrdersTable() {
         { id: '#3745', date: '20/03/2025', total: 199.00 },
     ];
     
-    
     const pageNumbers = [1, 2, 3, '...', 10];
     const maxPage = 10;
     
@@ -193,7 +178,6 @@ export default function UserOrdersTable() {
             setCurrentPage(page);
         }
     };
-    
     
     const [hoveredRow, setHoveredRow] = useState(null);
     const [hoveredLink, setHoveredLink] = useState(null);
@@ -244,17 +228,18 @@ export default function UserOrdersTable() {
                                     <td style={styles.td}>{order.date}</td>
                                     <td style={{...styles.td, ...styles.totalText}}>S/ {order.total.toFixed(2)}</td>
                                     <td style={{...styles.td, ...styles.actionCenter}}>
-                                        <button 
-                                            style={{ 
-                                                ...styles.actionButton, 
-                                                ...(hoveredButton === `action-${index}` ? styles.actionButtonHover : {}) 
-                                            }}
-                                            onMouseOver={() => setHoveredButton(`action-${index}`)}
-                                            onMouseOut={() => setHoveredButton(null)}
-                                            onClick={() => console.log('Ver detalle de orden', order.id)}
-                                        >
-                                            Ver detalle
-                                        </button>
+                                        <Link to="/orden/detalles">
+                                            <button 
+                                                style={{ 
+                                                    ...styles.actionButton, 
+                                                    ...(hoveredButton === `action-${index}` ? styles.actionButtonHover : {}) 
+                                                }}
+                                                onMouseOver={() => setHoveredButton(`action-${index}`)}
+                                                onMouseOut={() => setHoveredButton(null)}
+                                            >
+                                                Ver detalle
+                                            </button>
+                                        </Link>
                                     </td>
                                 </tr>
                             );
@@ -263,9 +248,7 @@ export default function UserOrdersTable() {
                 </table>
             </div>
             
-            
             <div style={styles.paginationWrapper}>
-                
                 <button 
                     style={{ 
                         ...styles.navButton, 
@@ -280,17 +263,14 @@ export default function UserOrdersTable() {
                     <ChevronLeft size={18} />
                 </button>
                 
-                
                 {pageNumbers.map((page, index) => {
                     const isActive = page === currentPage;
                     const isEllipsis = page === '...';
-                    
                     
                     const pageBtnStyle = isActive 
                         ? styles.pageButtonActive 
                         : (isEllipsis ? styles.pageEllipsis : styles.pageButton);
                         
-                    
                     const pageHoverStyle = (hoveredButton === `page-${index}` && !isActive && !isEllipsis)
                         ? styles.pageButtonHover : {};
 
@@ -307,7 +287,6 @@ export default function UserOrdersTable() {
                         </button>
                     );
                 })}
-                
                 
                 <button 
                     style={{ 

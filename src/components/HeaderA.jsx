@@ -1,7 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Search, ShoppingCart, User, Menu } from 'lucide-react';
 
-// --- DEFINICIÓN DE TEMA LOCAL ---
 const theme = {
     green: '#2e9b1f',
     dark: '#333',
@@ -12,7 +12,6 @@ const theme = {
     yellow300: '#fde047',
     shadowMd: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
 };
-
 
 export default function HeaderA() {
     const styles = {
@@ -128,15 +127,14 @@ export default function HeaderA() {
 
     return (
         <header style={styles.wrapper}>
-            
             <div style={styles.topBar}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    {/* Logo */}
-                    <div style={styles.logo}>
-                        GamePlay <span style={styles.dot}>•</span>
-                    </div>
+                    <Link to="/" style={{ textDecoration: 'none' }}>
+                        <div style={styles.logo}>
+                            GamePlay <span style={styles.dot}>•</span>
+                        </div>
+                    </Link>
                 </div>
-                
                 
                 <div style={styles.searchContainer}>
                     <input 
@@ -147,24 +145,22 @@ export default function HeaderA() {
                     <Search size={18} style={styles.searchIcon} />
                 </div>
 
-                
                 <div style={styles.actions}>
-                    
                     <div style={styles.cartBtn}>
                         <ShoppingCart size={20} style={styles.cartIcon} />
                         <span>Carrito S/ 00.00</span>
                     </div>
-                    
-                    <div style={styles.userAction}>
-                        <div style={styles.userActionInner}>
-                            <User size={18} style={styles.userIcon} /> Usuario
+                    <Link to="/usuario" style={{ textDecoration: 'none' }}>
+                        <div style={styles.userAction}>
+                            <div style={styles.userActionInner}>
+                                <User size={18} style={styles.userIcon} /> Usuario
+                            </div>
+                            <small style={styles.userText}>Cuenta</small>
                         </div>
-                        <small style={styles.userText}>Cuenta</small>
-                    </div>
+                    </Link>
                 </div>
             </div>
             
-           
             <nav style={styles.navBar}>
                 <ul style={styles.navList}>
                     <li style={styles.navItem}>
