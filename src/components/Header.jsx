@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import CartWidget from './CartWidget';
-import logoGamePlace from '../img/LogotipoGamePlace.jpg'; 
+import logoGamePlace from '../img/LogotipoGamePlace.jpg';
 
 export default function Header() {
   const [query, setQuery] = useState('');
@@ -34,7 +34,7 @@ export default function Header() {
         </form>
         <div className="gp-actions">
           <CartWidget />
-          <Link to="/usuario" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Link to="/login" style={{ textDecoration: 'none', color: 'inherit' }}>
             <div className="gp-user" aria-hidden>
               <div>Usuario</div>
               <small>cuenta</small>

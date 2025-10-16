@@ -17,68 +17,30 @@ import CheckoutAddressPage from './pages/CheckoutAddressPage.jsx';
 import CheckoutPaymentPage from './pages/CheckoutPaymentPage.jsx';
 import PaymentConfirmationPage from './pages/PaymentConfirmationPage.jsx';
 import OrderCompletedPage from './pages/OrderCompletedPage.jsx';
+import LoginPage from './pages/LoginPage.jsx';
+import RegisterPage from './pages/RegisterPage.jsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
     children: [
-      {
-        index: true,
-        element: <Home />,
-      },
-      {
-        path: 'productos',
-        element: <ProductsPage />,
-      },
-      {
-        path: 'producto/:productId',
-        element: <ProductDetailPage />,
-      },
-      {
-        path: 'search',
-        element: <SearchResultsPage />,
-      },
-      {
-        path: 'carro',
-        element: <CartPage />,
-      },
-      {
-        path: 'checkout/direccion',
-        element: <CheckoutAddressPage />,
-      },
-      {
-        path: 'checkout/pago',
-        element: <CheckoutPaymentPage />,
-      },
-      {
-        path: 'checkout/confirmacion/:method',
-        element: <PaymentConfirmationPage />,
-      },
-      {
-        path: 'orden/completada',
-        element: <OrderCompletedPage />,
-      },
-      {
-        path: 'usuario',
-        element: <UserDetailsPage />,
-      },
-      {
-        path: 'admin/categorias',
-        element: <CategoryListAdmin />,
-      },
-      {
-        path: 'orden/detalles',
-        element: <OrderDetailsPage />,
-      },
-      {
-        path: 'nosotros',
-        element: <div>Página de Nosotros</div>
-      },
-      {
-        path: 'ofertas',
-        element: <div>Página de Ofertas</div>
-      }
+      { index: true, element: <Home /> },
+      { path: 'login', element: <LoginPage /> },
+      { path: 'registro', element: <RegisterPage /> },
+      { path: 'productos', element: <ProductsPage /> },
+      { path: 'producto/:productId', element: <ProductDetailPage /> },
+      { path: 'search', element: <SearchResultsPage /> },
+      { path: 'carro', element: <CartPage /> },
+      { path: 'checkout/direccion', element: <CheckoutAddressPage /> },
+      { path: 'checkout/pago', element: <CheckoutPaymentPage /> },
+      { path: 'checkout/confirmacion/:method', element: <PaymentConfirmationPage /> },
+      { path: 'orden/completada', element: <OrderCompletedPage /> },
+      { path: 'usuario', element: <UserDetailsPage /> },
+      { path: 'admin/categorias', element: <CategoryListAdmin /> },
+      { path: 'orden/detalles', element: <OrderDetailsPage /> },
+      { path: 'nosotros', element: <div>Página de Nosotros</div> },
+      { path: 'ofertas', element: <div>Página de Ofertas</div> }
     ],
   },
 ]);
