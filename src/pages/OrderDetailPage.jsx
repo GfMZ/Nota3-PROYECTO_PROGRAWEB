@@ -15,8 +15,6 @@ export default function OrderDetailsPage() {
         fontFamily: "sans-serif",
       }}
     >
-      
-      <HeaderA />
 
       <main
         style={{
