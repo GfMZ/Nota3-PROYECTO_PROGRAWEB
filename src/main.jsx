@@ -6,7 +6,8 @@ import './styles.css';
 
 import App from './App.jsx';
 import Home from './pages/Home.jsx';
-import ProductsPage from './pages/ProductsPage.jsx'; // Necesitamos crear esta página
+import ProductsPage from './pages/ProductsPage.jsx';
+import SearchResultsPage from './pages/SearchResultsPage.jsx'; 
 import CategoryListAdmin from './pages/CategoryListAdmin.jsx';
 import UserDetailsPage from './pages/UserDetailsPage.jsx';
 import OrderDetailsPage from './pages/OrderDetailPage.jsx';
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
         element: <ProductsPage />,
       },
       {
+        path: 'search', 
+        element: <SearchResultsPage />,
+      },
+      {
         path: 'usuario',
         element: <UserDetailsPage />,
       },
@@ -36,7 +41,6 @@ const router = createBrowserRouter([
         path: 'orden/detalles',
         element: <OrderDetailsPage />,
       },
-      // Puedes agregar aquí las rutas para 'nosotros' y 'ofertas'
       {
         path: 'nosotros',
         element: <div>Página de Nosotros</div>

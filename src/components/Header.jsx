@@ -1,9 +1,19 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import CartWidget from './CartWidget';
-import logoGamePlace from '../img/LogotipoGamePlace.png';
+import logoGamePlace from '../img/LogotipoGamePlace.jpg'; 
 
 export default function Header() {
+  const [query, setQuery] = useState('');
+  const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (query.trim()) {
+      navigate(`/search?q=${query}`);
+    }
+  };
+
   return (
     <header className="gp-header">
       <div className="gp-top">
@@ -12,10 +22,16 @@ export default function Header() {
             <img src={logoGamePlace} alt="Logo de GamePlace" style={{ height: '80px', display: 'block' }} />
           </div>
         </Link>
-        <div className="gp-search">
-          <input type="search" placeholder="Buscar un producto..." aria-label="Buscar" />
-          <button className="search-btn" aria-label="Buscar">🔍</button>
-        </div>
+        <form className="gp-search" onSubmit={handleSearch}>
+          <input
+            type="search"
+            placeholder="Buscar por producto, serie o marca..."
+            aria-label="Buscar"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <button type="submit" className="search-btn" aria-label="Buscar">🔍</button>
+        </form>
         <div className="gp-actions">
           <CartWidget />
           <Link to="/usuario" style={{ textDecoration: 'none', color: 'inherit' }}>
