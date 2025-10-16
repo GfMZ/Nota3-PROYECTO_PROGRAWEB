@@ -1,16 +1,16 @@
 import React, { useState, createContext, useContext } from 'react';
 
 const CartContext = createContext();
-
 export const useCart = () => useContext(CartContext);
 
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
+  const [shippingAddress, setShippingAddress] = useState(null);
 
   const addToCart = (product) => {
     setCart(prevCart => {
-      const existingProduct = prevCart.find(item => item.id === product.id);
-      if (existingProduct) {
+      const existing = prevCart.find(item => item.id === product.id);
+      if (existing) {
         return prevCart.map(item =>
           item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
         );
@@ -19,26 +19,15 @@ export function CartProvider({ children }) {
     });
   };
 
-  const removeFromCart = (productId) => {
-    setCart(prevCart => prevCart.filter(item => item.id !== productId));
-  };
-
+  const removeFromCart = (productId) => setCart(prev => prev.filter(item => item.id !== productId));
   const updateQuantity = (productId, amount) => {
-    setCart(prevCart =>
-      prevCart.map(item => {
-        if (item.id === productId) {
-          const newQuantity = item.quantity + amount;
-          return newQuantity > 0 ? { ...item, quantity: newQuantity } : item;
-        }
-        return item;
-      }).filter(item => item.quantity > 0)
+    setCart(prev =>
+      prev.map(item =>
+        item.id === productId ? { ...item, quantity: Math.max(1, item.quantity + amount) } : item
+      )
     );
   };
-  
-  const clearCart = () => {
-    setCart([]);
-  };
-
+  const clearCart = () => setCart([]);
   const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
   const value = {
@@ -47,12 +36,10 @@ export function CartProvider({ children }) {
     removeFromCart,
     updateQuantity,
     clearCart,
-    totalPrice
+    totalPrice,
+    shippingAddress,
+    setShippingAddress
   };
 
-  return (
-    <CartContext.Provider value={value}>
-      {children}
-    </CartContext.Provider>
-  );
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

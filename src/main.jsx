@@ -15,6 +15,8 @@ import OrderDetailsPage from './pages/OrderDetailPage.jsx';
 import CartPage from './pages/CartPage.jsx';
 import CheckoutAddressPage from './pages/CheckoutAddressPage.jsx';
 import CheckoutPaymentPage from './pages/CheckoutPaymentPage.jsx';
+import PaymentConfirmationPage from './pages/PaymentConfirmationPage.jsx';
+import OrderCompletedPage from './pages/OrderCompletedPage.jsx';
 
 const router = createBrowserRouter([
   {
@@ -42,6 +44,22 @@ const router = createBrowserRouter([
         element: <CartPage />,
       },
       {
+        path: 'checkout/direccion',
+        element: <CheckoutAddressPage />,
+      },
+      {
+        path: 'checkout/pago',
+        element: <CheckoutPaymentPage />,
+      },
+      {
+        path: 'checkout/confirmacion/:method',
+        element: <PaymentConfirmationPage />,
+      },
+      {
+        path: 'orden/completada',
+        element: <OrderCompletedPage />,
+      },
+      {
         path: 'usuario',
         element: <UserDetailsPage />,
       },
@@ -60,14 +78,6 @@ const router = createBrowserRouter([
       {
         path: 'ofertas',
         element: <div>Página de Ofertas</div>
-      },
-      {
-        path: 'checkout/direccion',
-        element: <CheckoutAddressPage />,
-      },
-      {
-        path: 'checkout/pago',
-        element: <CheckoutPaymentPage />,
       }
     ],
   },
