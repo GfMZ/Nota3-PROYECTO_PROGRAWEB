@@ -7,7 +7,8 @@ import './styles.css';
 import App from './App.jsx';
 import Home from './pages/Home.jsx';
 import ProductsPage from './pages/ProductsPage.jsx';
-import SearchResultsPage from './pages/SearchResultsPage.jsx'; 
+import SearchResultsPage from './pages/SearchResultsPage.jsx';
+import ProductDetailPage from './pages/ProductDetailPage.jsx'; 
 import CategoryListAdmin from './pages/CategoryListAdmin.jsx';
 import UserDetailsPage from './pages/UserDetailsPage.jsx';
 import OrderDetailsPage from './pages/OrderDetailPage.jsx';
@@ -26,7 +27,11 @@ const router = createBrowserRouter([
         element: <ProductsPage />,
       },
       {
-        path: 'search', 
+        path: 'producto/:productId', 
+        element: <ProductDetailPage />,
+      },
+      {
+        path: 'search',
         element: <SearchResultsPage />,
       },
       {
