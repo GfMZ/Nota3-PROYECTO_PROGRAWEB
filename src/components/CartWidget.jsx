@@ -9,7 +9,7 @@ export default function CartWidget() {
   return (
     <Link to="/carro" style={{ textDecoration: 'none', color: 'inherit' }}>
       <div className="gp-cart" aria-hidden>
-        <div>Carrito ({itemCount})</div>
+        <div>Carrito 🛒({itemCount})</div>
         <div className="cart-amount">S/ {totalPrice.toFixed(2)}</div>
       </div>
     </Link>
