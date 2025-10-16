@@ -8,10 +8,13 @@ import App from './App.jsx';
 import Home from './pages/Home.jsx';
 import ProductsPage from './pages/ProductsPage.jsx';
 import SearchResultsPage from './pages/SearchResultsPage.jsx';
-import ProductDetailPage from './pages/ProductDetailPage.jsx'; 
+import ProductDetailPage from './pages/ProductDetailPage.jsx';
 import CategoryListAdmin from './pages/CategoryListAdmin.jsx';
 import UserDetailsPage from './pages/UserDetailsPage.jsx';
 import OrderDetailsPage from './pages/OrderDetailPage.jsx';
+import CartPage from './pages/CartPage.jsx';
+import CheckoutAddressPage from './pages/CheckoutAddressPage.jsx';
+import CheckoutPaymentPage from './pages/CheckoutPaymentPage.jsx';
 
 const router = createBrowserRouter([
   {
@@ -27,12 +30,16 @@ const router = createBrowserRouter([
         element: <ProductsPage />,
       },
       {
-        path: 'producto/:productId', 
+        path: 'producto/:productId',
         element: <ProductDetailPage />,
       },
       {
         path: 'search',
         element: <SearchResultsPage />,
+      },
+      {
+        path: 'carro',
+        element: <CartPage />,
       },
       {
         path: 'usuario',
@@ -53,6 +60,14 @@ const router = createBrowserRouter([
       {
         path: 'ofertas',
         element: <div>Página de Ofertas</div>
+      },
+      {
+        path: 'checkout/direccion',
+        element: <CheckoutAddressPage />,
+      },
+      {
+        path: 'checkout/pago',
+        element: <CheckoutPaymentPage />,
       }
     ],
   },
