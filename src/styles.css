@@ -65,6 +65,81 @@ body { font-family: Inter, system-ui, Arial, sans-serif; margin:0; color:var(--d
 .footer-top .col { flex:1; }
 .footer-bottom { text-align:center; margin-top:18px; opacity:0.85; }
 
+.gp-login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+  background: #fafafa;
+}
+
+.gp-login-box {
+  background: #fff;
+  border: 1px solid #eee;
+  padding: 40px 36px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.gp-login-title {
+  text-align: center;
+  margin-bottom: 24px;
+  color: var(--green);
+  font-weight: 700;
+}
+
+.gp-form-group {
+  margin-bottom: 18px;
+}
+
+.gp-form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: var(--dark);
+}
+
+.gp-form-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.gp-btn-login {
+  background: var(--green);
+  color: #fff;
+  border: none;
+  width: 100%;
+  padding: 10px 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.gp-btn-login:hover {
+  background: #26841a;
+}
+
+.gp-login-links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.gp-login-links a {
+  color: var(--green);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.gp-login-links a:hover {
+  text-decoration: underline;
+}
 
 @media (max-width:900px){
   .bestsellers-grid { grid-template-columns: repeat(2,1fr); }
