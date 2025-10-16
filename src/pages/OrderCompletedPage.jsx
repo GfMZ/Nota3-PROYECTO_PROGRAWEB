@@ -45,7 +45,7 @@ export default function OrderCompletedPage() {
           <div style={{ border: '1px solid #eee', padding: '1.5rem', borderRadius: '8px' }}>
             <h3>Dirección de envío</h3>
             <p>{shippingAddress?.address || 'No especificada'}</p>
-            <p><strong>Fecha de entrega aproximada: 16/10/2025</strong></p>
+            <p><strong>Fecha de entrega aproximada: 04/05/2025</strong></p>
           </div>
           <Link to="/" style={{ display: 'block', width: '100%', padding: '1rem', backgroundColor: 'var(--green)', color: 'white', textDecoration: 'none', textAlign: 'center', borderRadius: '8px' }}>
             Ver más ofertas
