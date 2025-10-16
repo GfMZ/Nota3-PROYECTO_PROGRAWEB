@@ -5,8 +5,8 @@ import Pagination from '../components/Pagination';
 import AddCategoryForm from '../components/AddCategoryForm';
 
 export default function CategoryListAdmin() {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [categories, setCategories] = useState([
+    const [isModalOpen, setIsModalOpen] = useState(false); 
+    const [categories, setCategories] = useState([ 
         { id: 1, name: 'Videojuegos', description: 'Lorem ipsum dolor sit amet...' },
         { id: 2, name: 'Consolas', description: 'Lorem ipsum dolor sit amet...' },
         { id: 3, name: 'Periféricos', description: 'Lorem ipsum dolor sit amet...' },
@@ -17,16 +17,16 @@ export default function CategoryListAdmin() {
     ]);
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const totalPages = 10;
+    const totalPages = 10; 
 
     const filteredCategories = useMemo(() => {
         if (!searchTerm) return categories;
         const lowerCaseSearch = searchTerm.toLowerCase();
-        return categories.filter(category =>
+        return categories.filter(category => (
             String(category.id).includes(lowerCaseSearch) ||
             category.name.toLowerCase().includes(lowerCaseSearch) ||
             category.description.toLowerCase().includes(lowerCaseSearch)
-        );
+        ));
     }, [categories, searchTerm]);
 
     const handlePageChange = (page) => {
@@ -34,24 +34,26 @@ export default function CategoryListAdmin() {
             setCurrentPage(page);
         }
     };
-
+    
     const handleOpenModal = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
 
     const handleAddCategory = (newCategoryData) => {
         const newId = categories.length > 0 ? categories[categories.length - 1].id + 1 : 1;
         const newCategory = { id: newId, ...newCategoryData };
-        setCategories(prev => [...prev, newCategory]);
+        setCategories(prevCategories => [...prevCategories, newCategory]);
     };
 
     const handleDeleteCategory = (categoryId) => {
-        setCategories(prev => prev.filter(category => category.id !== categoryId));
+        setCategories(prevCategories => 
+            prevCategories.filter(category => category.id !== categoryId)
+        );
     };
 
     const mainLayoutStyles = {
         display: 'flex',
-        minHeight: 'calc(100vh - 120px)',
-        backgroundColor: '#F0F2F5'
+        minHeight: 'calc(100vh - 120px)', 
+        backgroundColor: '#F0F2F5' 
     };
 
     const contentAreaStyles = {
@@ -61,26 +63,28 @@ export default function CategoryListAdmin() {
     };
 
     return (
-        <div style={mainLayoutStyles}>
-            <SideMenu />
-            <div style={contentAreaStyles}>
-                <CategoryTable
-                    categories={filteredCategories}
-                    searchTerm={searchTerm}
-                    setSearchTerm={setSearchTerm}
-                    onAddCategoryClick={handleOpenModal}
-                    onDeleteCategory={handleDeleteCategory}
-                />
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                />
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw', margin: 0, padding: 0 }}>
+            <div style={mainLayoutStyles}>
+                <SideMenu />
+                <div style={contentAreaStyles}>
+                    <CategoryTable 
+                        categories={filteredCategories} 
+                        searchTerm={searchTerm} 
+                        setSearchTerm={setSearchTerm} 
+                        onAddCategoryClick={handleOpenModal} 
+                        onDeleteCategory={handleDeleteCategory}
+                    />
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                    />
+                </div>
             </div>
-            <AddCategoryForm
-                isOpen={isModalOpen}
-                onClose={handleCloseModal}
-                onSave={handleAddCategory}
+            <AddCategoryForm 
+                isOpen={isModalOpen} 
+                onClose={handleCloseModal} 
+                onSave={handleAddCategory} 
             />
         </div>
     );

@@ -1,11 +1,6 @@
-// UserDetailsPage.jsx
-
 import React, { useState } from 'react'; 
 import { Lock } from 'lucide-react';
-
 import UserOrdersTable from '../components/UserOrdersTable';
-import HeaderA from '../components/HeaderA';
-import SideMenuA from '../components/SideMenuA';
 import UserDetailCard from '../components/UserDetailCard';
 import ChangePasswordModal from '../components/ChangePasswordModal';
 
@@ -32,11 +27,9 @@ const headerContainerStyle = {
     justifyContent: 'space-between', 
     alignItems: 'center', 
     marginBottom: '2rem', 
-    paddingLeft: '2rem', 
-    paddingRight: '2rem'
+    padding: '2rem 2rem 0 2rem'
 };
 
-// Estilo del texto h1
 const titleStyle = {
     fontSize: '1.875rem', 
     fontWeight: '800', 
@@ -47,10 +40,7 @@ const changePasswordButtonStyle = {
     backgroundColor: '#2563EB', 
     color: 'white',
     fontWeight: '600', 
-    paddingTop: '0.5rem', 
-    paddingBottom: '0.5rem', 
-    paddingLeft: '1rem', 
-    paddingRight: '1rem', 
+    padding: '0.5rem 1rem', 
     borderRadius: '0.5rem', 
     fontSize: '0.875rem', 
     display: 'flex',
@@ -58,59 +48,41 @@ const changePasswordButtonStyle = {
     transition: 'background-color 150ms', 
     boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)', 
     cursor: 'pointer',
-    ':hover': { 
-        backgroundColor: '#1D4ED8', 
-    }
 };
 
-
 export default function UserDetailsPage() { 
-    // ESTADOS
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false); 
     
-    // HANDLERS
     const handleOpenPasswordModal = () => setIsPasswordModalOpen(true);
     const handleClosePasswordModal = () => setIsPasswordModalOpen(false);
 
     const handleChangePassword = (passwords) => {
-        //----------------------------Cambiar contraseña----------------------------------------
-        console.log("API CALL: Cambiando contraseña para el usuario:", mockUser.id);
+        console.log("Cambiando contraseña para el usuario:", mockUser.id);
         console.log("Contraseña Antigua:", passwords.oldPassword);
         console.log("Nueva Contraseña:", passwords.newPassword);
     };
     
     const handleEditUser = () => {
-        console.log("Simulación: Iniciar edición de datos del usuario...");
+        console.log("Iniciar edición de datos del usuario...");
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 font-sans">
-            
-            <HeaderA /> 
-            
+        <div className="bg-gray-100 font-sans">
             <div>
-                <div>
-                    <div style={headerContainerStyle}>
-                        <h1 style={titleStyle}>Detalles de Usuario: {mockUser.name}</h1>
-                        <button 
-                            style={changePasswordButtonStyle}
-                            onClick={handleOpenPasswordModal}
-                            onMouseEnter={() => setIsHovered(true)}
-                            onMouseLeave={() => setIsHovered(false)} 
-                        >
-                            <Lock size={16} style={{ marginRight: '0.5rem' }} /> Cambiar contraseña
-                        </button>
-                    </div>
-
-                    <div style={{ paddingLeft: '2rem', paddingRight: '2rem' }}> 
-                        <UserDetailCard user={mockUser} onEdit={handleEditUser} /> 
-                        <UserOrdersTable orders={mockOrders} /> 
-                    </div>
-                    
+                <div style={headerContainerStyle}>
+                    <h1 style={titleStyle}>Detalles de Usuario: {mockUser.name}</h1>
+                    <button 
+                        style={changePasswordButtonStyle}
+                        onClick={handleOpenPasswordModal}
+                    >
+                        <Lock size={16} style={{ marginRight: '0.5rem' }} /> Cambiar contraseña
+                    </button>
+                </div>
+                <div style={{ paddingLeft: '2rem', paddingRight: '2rem' }}> 
+                    <UserDetailCard user={mockUser} onEdit={handleEditUser} /> 
+                    <UserOrdersTable orders={mockOrders} /> 
                 </div>
             </div>
-            
-            {/* MODAL */}
             <ChangePasswordModal 
                 isOpen={isPasswordModalOpen}
                 onClose={handleClosePasswordModal}
