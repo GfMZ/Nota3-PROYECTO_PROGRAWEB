@@ -1,0 +1,19 @@
+### 1. CREAR CATEGORÍA: CONSOLAS
+POST http://localhost:4000/api/categories
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MjkxZjUwNWJhZDc4NDQzYzgyMjZmZSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc2NDMwMjY3MiwiZXhwIjoxNzY2ODk0NjcyfQ.609tRsYR4AJzY7KduaSqp6WzZgPfNFAWrKSBj9NBq_s
+
+{
+    "name": "Consolas",
+    "description": "Hardware de entretenimiento y videojuegos."
+}
+
+### 2. CREAR CATEGORÍA: PERIFÉRICOS
+POST http://localhost:4000/api/categories
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MjkxZjUwNWJhZDc4NDQzYzgyMjZmZSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc2NDMwMjY3MiwiZXhwIjoxNzY2ODk0NjcyfQ.609tRsYR4AJzY7KduaSqp6WzZgPfNFAWrKSBj9NBq_s
+
+{
+    "name": "Periféricos",
+    "description": "Accesorios y hardware de PC."
+}
