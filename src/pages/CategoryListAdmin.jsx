@@ -3,8 +3,12 @@ import SideMenu from '../components/SideMenu';
 import CategoryTable from '../components/CategoryTable';
 import Pagination from '../components/Pagination';
 import AddCategoryForm from '../components/AddCategoryForm';
+import { useAuth } from '../context/AuthContext';
 
 export default function CategoryListAdmin() {
+    const { user } = useAuth();
+    const isAdmin = user && user.isAdmin;
+
     const [isModalOpen, setIsModalOpen] = useState(false); 
     const [categories, setCategories] = useState([ 
         { id: 1, name: 'Videojuegos', description: 'Lorem ipsum dolor sit amet...' },
@@ -71,8 +75,9 @@ export default function CategoryListAdmin() {
                         categories={filteredCategories} 
                         searchTerm={searchTerm} 
                         setSearchTerm={setSearchTerm} 
-                        onAddCategoryClick={handleOpenModal} 
-                        onDeleteCategory={handleDeleteCategory}
+                        onAddCategoryClick={isAdmin ? handleOpenModal : undefined} 
+                        onDeleteCategory={isAdmin ? handleDeleteCategory : undefined}
+                        isAdmin={isAdmin}
                     />
                     <Pagination
                         currentPage={currentPage}
@@ -81,11 +86,13 @@ export default function CategoryListAdmin() {
                     />
                 </div>
             </div>
-            <AddCategoryForm 
-                isOpen={isModalOpen} 
-                onClose={handleCloseModal} 
-                onSave={handleAddCategory} 
-            />
+            {isAdmin && (
+                <AddCategoryForm 
+                    isOpen={isModalOpen} 
+                    onClose={handleCloseModal} 
+                    onSave={handleAddCategory} 
+                />
+            )}
         </div>
     );
 }

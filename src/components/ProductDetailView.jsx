@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { ShoppingCart } from 'lucide-react';
 
@@ -62,12 +62,24 @@ const viewStyles = {
 };
 
 export default function ProductDetailView({ product }) {
-
   const { addToCart } = useCart();
+  const [isAdded, setIsAdded] = useState(false);
 
   const handleAddToCart = () => {
+    if (isAdded) return;
+
     addToCart(product);
-    alert(`${product.name} ha sido agregado al carrito.`);
+    setIsAdded(true);
+
+    setTimeout(() => {
+      setIsAdded(false);
+    }, 2000);
+  };
+
+  const dynamicButtonStyles = {
+    ...viewStyles.addButton,
+    backgroundColor: isAdded ? '#6c757d' : '#2e9b1f',
+    cursor: isAdded ? 'not-allowed' : 'pointer'
   };
 
   return (
@@ -85,8 +97,16 @@ export default function ProductDetailView({ product }) {
             DESCRIPCION DEL PRODUCTO
           </p>
           <div style={viewStyles.price}>s/ {product.price.toFixed(2)}</div>
-          <button onClick={handleAddToCart} style={viewStyles.addButton}>
-            <ShoppingCart size={20} /> AGREGAR
+          <button 
+            onClick={handleAddToCart} 
+            style={dynamicButtonStyles}
+            disabled={isAdded}
+          >
+            {isAdded ? '¡Producto agregado! ' : (
+              <>
+                <ShoppingCart size={20} /> AGREGAR
+              </>
+            )}
           </button>
         </div>
       </div>

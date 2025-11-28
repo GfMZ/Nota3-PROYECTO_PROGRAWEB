@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
-import { useNavigate } from 'react-router-dom';
 import banner1 from '../img/tlou2.jpg';
 
 export default function Banner() {
   const { addToCart } = useCart();
-  const navigate = useNavigate();
+  const [isAdded, setIsAdded] = useState(false);
 
   const bannerProduct = {
     id: 101,
@@ -15,8 +14,14 @@ export default function Banner() {
   };
 
   const handleAddToCart = () => {
+    if (isAdded) return;
+
     addToCart(bannerProduct);
-    navigate('/carro');
+    setIsAdded(true);
+
+    setTimeout(() => {
+      setIsAdded(false);
+    }, 2000);
   };
 
   return (
@@ -33,7 +38,17 @@ export default function Banner() {
         <div className="banner-content">
           <h2>{bannerProduct.name}</h2>
           <p className="price">S/ {bannerProduct.price.toFixed(2)} <span className="old">S/ 199.90</span></p>
-          <button className="btn-add" onClick={handleAddToCart}>Añadir al carrito</button>
+          <button 
+            className="btn-add" 
+            onClick={handleAddToCart}
+            disabled={isAdded}
+            style={{ 
+              backgroundColor: isAdded ? '#6c757d' : '',
+              cursor: isAdded ? 'not-allowed' : 'pointer'
+            }}
+          >
+            {isAdded ? '¡Producto agregado!' : 'Añadir al carrito'}
+          </button>
         </div>
       </div>
     </section>

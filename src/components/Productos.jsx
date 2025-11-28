@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 
-export default function Productos({ product }) {
-  // Productos organizados por categoría
+export default function Productos() {
   const productosPorCategoria = {
     "Videojuegos": [
       { id: 1, nombre: "RDR2 Juego PS4", precio: 189, imagen: "https://gamescenter.pe/wp-content/uploads/2024/08/RDR2.jpg" },
@@ -23,18 +22,32 @@ export default function Productos({ product }) {
       { id: 11, nombre: "Taza Call of Duty", precio: 49, imagen: "https://m.media-amazon.com/images/I/61NOg4h8MEL._AC_SL1500_.jpg" },
       { id: 12, nombre: "Poster Spiderman PS5", precio: 45, imagen: "https://m.media-amazon.com/images/I/71RL9FzdpjL._AC_SL1500_.jpg" },
     ],
-    }
-
-    const { addToCart } = useCart();
-    const navigate = useNavigate();
-
-    const handleAddToCart = () => {
-    addToCart(product);
-    navigate('/carro');
   };
 
-  const categorias = Object.keys(productosPorCategoria);
+  const { addToCart } = useCart();
   const [categoriaActiva, setCategoriaActiva] = useState("Videojuegos");
+  const [addedProductId, setAddedProductId] = useState(null);
+
+  const categorias = Object.keys(productosPorCategoria);
+
+  const handleProductAdd = (productToAdd) => {
+    if (addedProductId === productToAdd.id) return;
+
+    const cartProduct = {
+      id: productToAdd.id,
+      name: productToAdd.nombre,
+      price: productToAdd.precio,
+      imageUrl: productToAdd.imagen,
+      category: categoriaActiva
+    };
+
+    addToCart(cartProduct);
+    setAddedProductId(productToAdd.id);
+
+    setTimeout(() => {
+      setAddedProductId(null);
+    }, 2000);
+  };
 
   return (
     <section style={{ display: "flex", padding: "2rem" }}>
@@ -70,7 +83,6 @@ export default function Productos({ product }) {
         </ul>
       </aside>
 
-      {/* Lista de productos */}
       <div style={{ flex: 1, paddingLeft: "2rem" }}>
         <h2 style={{ marginBottom: "1.5rem" }}>{categoriaActiva}</h2>
         <div
@@ -80,41 +92,52 @@ export default function Productos({ product }) {
             gap: "1.5rem",
           }}
         >
-          {productosPorCategoria[categoriaActiva].map((p) => (
-            <div
-              key={p.id}
-              style={{
-                border: "1px solid #ddd",
-                borderRadius: "12px",
-                padding: "1rem",
-                textAlign: "center",
-                backgroundColor: "#fff",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-              }}
-            >
-              <img
-                src={p.imagen}
-                alt={p.nombre}
+          {productosPorCategoria[categoriaActiva].map((p) => {
+            const isAdded = addedProductId === p.id;
+            return (
+              <div
+                key={p.id}
                 style={{
-                  width: "100%",
-                  height: "220px",
-                  objectFit: "cover",
-                  borderRadius: "8px",
-                  marginBottom: "10px",
+                  border: "1px solid #ddd",
+                  borderRadius: "12px",
+                  padding: "1rem",
+                  textAlign: "center",
+                  backgroundColor: "#fff",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                 }}
-              />
-              <h4 style={{ marginBottom: "5px" }}>{p.nombre}</h4>
-              <p style={{ color: "#666", marginBottom: "5px" }}>
-                {categoriaActiva}
-              </p>
-              <p style={{ fontWeight: "bold", color: "#2E7D32" }}>
-                S/{p.precio}
-              </p>
-              <button className="btn-add" onClick={handleAddToCart}>
-                AGREGAR
-              </button>
-            </div>
-          ))}
+              >
+                <img
+                  src={p.imagen}
+                  alt={p.nombre}
+                  style={{
+                    width: "100%",
+                    height: "220px",
+                    objectFit: "cover",
+                    borderRadius: "8px",
+                    marginBottom: "10px",
+                  }}
+                />
+                <h4 style={{ marginBottom: "5px" }}>{p.nombre}</h4>
+                <p style={{ color: "#666", marginBottom: "5px" }}>
+                  {categoriaActiva}
+                </p>
+                <p style={{ fontWeight: "bold", color: "#2E7D32" }}>
+                  S/{p.precio}
+                </p>
+                <button 
+                  className="btn-add" 
+                  onClick={() => handleProductAdd(p)}
+                  disabled={isAdded}
+                  style={{ 
+                    backgroundColor: isAdded ? '#6c757d' : '',
+                    cursor: isAdded ? 'not-allowed' : 'pointer'
+                  }}
+                >
+                  {isAdded ? '¡Producto agregado!' : 'AGREGAR'}
+                </button>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { CartProvider } from './context/CartContext.jsx';
+import { AuthProvider } from './context/AuthContext.jsx';
 import './styles.css';
 
 import App from './App.jsx';
@@ -17,7 +18,7 @@ import CheckoutAddressPage from './pages/CheckoutAddressPage.jsx';
 import CheckoutPaymentPage from './pages/CheckoutPaymentPage.jsx';
 import PaymentConfirmationPage from './pages/PaymentConfirmationPage.jsx';
 import OrderCompletedPage from './pages/OrderCompletedPage.jsx';
-import LoginPage from './pages/LoginPage.jsx';
+import Login from './pages/Login.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 
 const router = createBrowserRouter([
@@ -26,7 +27,7 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       { index: true, element: <Home /> },
-      { path: 'login', element: <LoginPage /> },
+      { path: 'login', element: <Login /> },
       { path: 'registro', element: <RegisterPage /> },
       { path: 'productos', element: <ProductsPage /> },
       { path: 'producto/:productId', element: <ProductDetailPage /> },
@@ -47,8 +48,10 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <CartProvider>
-      <RouterProvider router={router} />
-    </CartProvider>
+    <AuthProvider>
+      <CartProvider>
+        <RouterProvider router={router} />
+      </CartProvider>
+    </AuthProvider>
   </React.StrictMode>
 );

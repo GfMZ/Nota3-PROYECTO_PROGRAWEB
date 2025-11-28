@@ -1,7 +1,7 @@
 // CategoryTable.jsx
 import React from 'react';
 
-const CategoryTable = ({ categories, searchTerm, setSearchTerm, onAddCategoryClick, onDeleteCategory }) => {
+const CategoryTable = ({ categories, searchTerm, setSearchTerm, onAddCategoryClick, onDeleteCategory, isAdmin }) => {
 
     const handleSearchChange = (event) => {  
         setSearchTerm(event.target.value); 
@@ -110,10 +110,12 @@ const CategoryTable = ({ categories, searchTerm, setSearchTerm, onAddCategoryCli
                         onChange={handleSearchChange} 
                     />
                 </div>
-                <button style={addButtonStyles} onClick={onAddCategoryClick} >
-                    <span style={{ fontSize: '20px', marginRight: '5px' }}>&#x271A;</span> {/* Cruz/Más */}
-                    Agregar categoría
-                </button>
+                {isAdmin && (
+                    <button style={addButtonStyles} onClick={onAddCategoryClick} >
+                        <span style={{ fontSize: '20px', marginRight: '5px' }}>&#x271A;</span> {/* Cruz/Más */}
+                        Agregar categoría
+                    </button>
+                )}
             </div>
 
             <table style={tableStyles}>
@@ -121,7 +123,7 @@ const CategoryTable = ({ categories, searchTerm, setSearchTerm, onAddCategoryCli
                     <tr>
                         <th style={thStyles}>Nombre</th>
                         <th style={thStyles}>Descripción</th>
-                        <th style={thStyles}>Acciones</th>
+                        {isAdmin && <th style={thStyles}>Acciones</th>}
                     </tr>
                 </thead>
                 <tbody>
@@ -129,10 +131,12 @@ const CategoryTable = ({ categories, searchTerm, setSearchTerm, onAddCategoryCli
                         <tr key={category.id}>
                             <td style={tdStyles}>{category.name}</td>
                             <td style={tdStyles}>{category.description}</td>
-                            <td style={tdStyles}>
-                                <span style={actionIconStyles} title="Editar">&#9998;</span> {/* Lápiz */}
-                                <span style={actionIconStyles} title="Eliminar" onClick={() => handleDeleteClick(category.id)} >🗑️</span> {/* Bote de basura */}
-                            </td>
+                            {isAdmin && (
+                                <td style={tdStyles}>
+                                    <span style={actionIconStyles} title="Editar">&#9998;</span> {/* Lápiz */}
+                                    <span style={actionIconStyles} title="Eliminar" onClick={() => handleDeleteClick(category.id)} >🗑️</span> {/* Bote de basura */}
+                                </td>
+                            )}
                         </tr>
                     ))}
                 </tbody>

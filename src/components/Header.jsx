@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import CartWidget from './CartWidget';
 import logoGamePlace from '../img/LogotipoGamePlace.jpg';
+import { useAuth } from '../context/AuthContext';
 
 export default function Header() {
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -34,12 +36,28 @@ export default function Header() {
         </form>
         <div className="gp-actions">
           <CartWidget />
-          <Link to="/login" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <div className="gp-user" aria-hidden>
-              <div>Usuario</div>
-              <small>cuenta</small>
+          {user ? (
+            <div className="gp-user">
+              <Link to="/usuario" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <div>Hola, {user.nombre}</div>
+              </Link>
+              <small>
+                <button 
+                  onClick={logout} 
+                  style={{ all: 'unset', cursor: 'pointer', textDecoration: 'underline' }}
+                >
+                  Cerrar Sesión
+                </button>
+              </small>
             </div>
-          </Link>
+          ) : (
+            <Link to="/login" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <div className="gp-user" aria-hidden>
+                <div>Usuario</div>
+                <small>cuenta</small>
+              </div>
+            </Link>
+          )}
         </div>
       </div>
       <nav className="gp-nav" aria-label="Navegación principal">
