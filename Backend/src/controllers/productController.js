@@ -54,4 +54,4 @@ export const updateProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
     res.status(501).json({ message: 'Ruta de eliminación pendiente.' });
-};
+};  
