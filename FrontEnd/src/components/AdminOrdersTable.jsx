@@ -118,7 +118,7 @@ export default function AdminOrdersTable() {
         );
     }
 
-    return (
+return (
         <div>
             <div style={cardStyles.container}>
                 {statsData.map((item, index) => (
@@ -153,11 +153,16 @@ export default function AdminOrdersTable() {
                             {orders.map((order, index) => {
                                 const rowStyle = { ...styles.tr, ...(hoveredRow === index ? styles.trHover : {}) };
                                 const date = new Date(order.createdAt).toLocaleDateString();
-                                const orderIdDisplay = order._id.slice(-6).toUpperCase();
+                                
+                                // --- CORRECCIÓN AQUÍ ---
+                                // Convertimos el ID a String antes de cortar
+                                const idStr = String(order._id || order.id);
+                                const orderIdDisplay = idStr.length > 6 ? idStr.slice(-6).toUpperCase() : idStr;
+                                
                                 const clientName = order.user ? (order.user.name || order.user.email) : "Desconocido";
 
                                 return (
-                                    <tr key={order._id} style={rowStyle} onMouseOver={() => setHoveredRow(index)} onMouseOut={() => setHoveredRow(null)}>
+                                    <tr key={order._id || index} style={rowStyle} onMouseOver={() => setHoveredRow(index)} onMouseOut={() => setHoveredRow(null)}>
                                         <td style={styles.td}>
                                             <Link to={`/orden/detalles/${order._id}`} style={{ ...styles.idLink, ...(hoveredLink === `id-${index}` ? styles.idLinkHover : {}) }} onMouseOver={() => setHoveredLink(`id-${index}`)} onMouseOut={() => setHoveredLink(null)}>
                                                 {orderIdDisplay}
@@ -179,5 +184,4 @@ export default function AdminOrdersTable() {
                 </div>
             </div>
         </div>
-    );
-}
+    );}

@@ -1,0 +1,101 @@
+### ==================================================
+### 1. AUTENTICACIÓN (Login para obtener Token)
+### ==================================================
+
+# 1A. Iniciar sesión como Super Admin (Creado por el seed.js)
+# Credenciales: superadmin@test.com / securepassword
+# @name loginAdmin
+POST http://localhost:4000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "superadmin@test.com",
+    "password": "securepassword"
+}
+
+### Guardar el token en una variable (automático con REST Client)
+@authToken = {{loginAdmin.response.body.token}}
+
+
+### ==================================================
+### 2. CATÁLOGO PÚBLICO
+### ==================================================
+
+# 2A. Listar Todos los Productos
+# Debería devolver 12 productos. Fíjate que los IDs sean números (1, 2, 3...)
+GET http://localhost:4000/api/products
+
+# 2B. Listar Categorías
+# Debería devolver: Consolas (ID 1), Periféricos (ID 2), Cableados (ID 3)
+###
+GET http://localhost:4000/api/categories
+
+
+### ==================================================
+### 3. GESTIÓN DE CARRITO Y ÓRDENES (Requiere Token)
+### ==================================================
+
+# 3A. Crear una Orden de Prueba
+# Compramos una Xbox (ID 1) y un Switch (ID 2)
+POST http://localhost:4000/api/orders
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "orderItems": [
+    {
+      "product": 1, 
+      "name": "Xbox Series X 1TB",
+      "quantity": 1,
+      "imageUrl": "https://placehold.co/400x400/107C10/ffffff?text=Xbox",
+      "price": 2399.00
+    },
+    {
+      "product": 2,
+      "name": "Nintendo Switch OLED",
+      "quantity": 2,
+      "imageUrl": "https://placehold.co/400x400/E60012/ffffff?text=Switch",
+      "price": 1699.00
+    }
+  ],
+  "shippingAddress": {
+    "address": "Av. Javier Prado 123, Lima",
+    "city": "Lima",
+    "country": "Peru"
+  },
+  "paymentMethod": "tarjeta",
+  "totalPrice": 5797.00
+}
+
+###
+# 3B. Ver Mis Órdenes
+# Debería aparecer la orden que acabas de crear
+GET http://localhost:4000/api/orders/myorders
+Authorization: Bearer {{authToken}}
+
+
+### ==================================================
+### 4. ADMINISTRACIÓN (Solo Admin)
+### ==================================================
+
+# 4A. Ver TODAS las órdenes del sistema
+GET http://localhost:4000/api/orders/admin
+Authorization: Bearer {{authToken}}
+###
+# 4B. Crear un Producto Nuevo
+POST http://localhost:4000/api/products
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "name": "Producto de Prueba SQL",
+    "description": "Probando la inserción en Postgres",
+    "price": 99.90,
+    "categoryId": 1, 
+    "imageUrl": "https://placehold.co/400x400/000000/ffffff?text=Test",
+    "stock": 100
+}
+###
+# 4C. Borrar el producto creado (Asumiendo que será el ID 13)
+DELETE http://localhost:4000/api/products/13
+Authorization: Bearer {{authToken}}

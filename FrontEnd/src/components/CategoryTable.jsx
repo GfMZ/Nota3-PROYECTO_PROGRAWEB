@@ -1,12 +1,15 @@
 // CategoryTable.jsx
 import React from 'react';
 
-const CategoryTable = ({ categories, searchTerm, setSearchTerm, onAddCategoryClick, onDeleteCategory, isAdmin }) => {
+const CategoryTable = ({ categories, searchTerm, setSearchTerm, onAddCategoryClick, onDeleteCategory, onEditCategory, isAdmin }) => {
+
+    
 
     const handleSearchChange = (event) => {  
         setSearchTerm(event.target.value); 
     };
 
+    
     
 
     const handleDeleteClick = (categoryId) => {
@@ -17,6 +20,8 @@ const CategoryTable = ({ categories, searchTerm, setSearchTerm, onAddCategoryCli
             }
         }
     };
+
+    
 
     const tableContainerStyles = {
         flexGrow: 1,
@@ -105,7 +110,6 @@ const CategoryTable = ({ categories, searchTerm, setSearchTerm, onAddCategoryCli
                         type="text"
                         placeholder="Buscar un producto..."
                         style={searchInputStyles}
-
                         value={searchTerm}       
                         onChange={handleSearchChange} 
                     />
@@ -133,7 +137,14 @@ const CategoryTable = ({ categories, searchTerm, setSearchTerm, onAddCategoryCli
                         <td style={tdStyles}>{category.description}</td>
                         {isAdmin && (
                             <td style={tdStyles}>
-                                <span style={actionIconStyles} title="Editar">&#9998;</span>
+                                {/* BOTÓN DE EDICIÓN (CORREGIDO) */}
+                                <span 
+                                    style={actionIconStyles} 
+                                    title="Editar"
+                                    onClick={() => onEditCategory(category)}
+                                >
+                                    &#9998;
+                                </span>
                                 <span style={actionIconStyles} title="Eliminar" onClick={() => handleDeleteClick(category._id)} >🗑️</span> 
                             </td>
                         )}

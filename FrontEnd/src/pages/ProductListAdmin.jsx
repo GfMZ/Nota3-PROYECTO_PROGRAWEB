@@ -4,7 +4,7 @@ import Pagination from '../components/Pagination';
 import AddProductForm from '../components/AddProductForm';
 import { useAuth } from '../context/AuthContext';
 import { fetchProducts } from '../services/productService';
-// Importamos updateProduct también
+// Importamos correctamente las funciones del servicio
 import { deleteProduct, createProduct, updateProduct } from '../services/adminService'; 
 
 export default function ProductListAdmin() {
@@ -15,7 +15,7 @@ export default function ProductListAdmin() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     
-    // Estado para saber qué producto estamos editando (null = modo crear)
+    // Estado para editar
     const [editingProduct, setEditingProduct] = useState(null);
 
     const loadProducts = async () => {
@@ -27,38 +27,46 @@ export default function ProductListAdmin() {
 
     useEffect(() => { loadProducts(); }, []);
 
-    // Función unificada para Guardar (Crear o Editar)
+    // Función unificada para Guardar
     const handleSaveProduct = async (productData) => {
         try {
+            // Validación básica de tipos
+            const payload = {
+                ...productData,
+                price: parseFloat(productData.price),
+                stock: parseInt(productData.stock, 10),
+                // Aseguramos que categoryId se envíe, no el objeto entero
+                categoryId: productData.categoryId || productData.category?._id
+            };
+
             if (editingProduct) {
-                // MODO EDICIÓN: PUT /api/products/:id
-                await updateProduct(editingProduct._id, productData, getAuthHeader());
+                // UPDATE
+                await updateProduct(editingProduct._id, payload, getAuthHeader());
                 alert('Producto actualizado correctamente.');
             } else {
-                // MODO CREACIÓN: POST /api/products
-                await createProduct(productData, getAuthHeader());
+                // CREATE
+                await createProduct(payload, getAuthHeader());
                 alert('Producto creado correctamente.');
             }
             
-            // Cerrar modal y recargar tabla
             setIsModalOpen(false);
-            setEditingProduct(null); // Limpiar selección
+            setEditingProduct(null);
             loadProducts();
             
         } catch (error) { 
-            alert(error.message); 
+            alert(`Error: ${error.message}`); 
         }
     };
 
-    // Abrir modal en modo "Crear"
     const handleOpenCreate = () => {
-        setEditingProduct(null); // Aseguramos que no hay producto seleccionado
+        setEditingProduct(null); 
         setIsModalOpen(true);
     };
 
-    // Abrir modal en modo "Editar"
     const handleOpenEdit = (product) => {
-        setEditingProduct(product); // Pasamos el producto completo al formulario
+        // Preparamos el objeto para el formulario
+        // Aseguramos que category sea accesible para que el select lo tome
+        setEditingProduct(product); 
         setIsModalOpen(true);
     };
 
@@ -117,39 +125,23 @@ export default function ProductListAdmin() {
                             <tr key={p._id}>
                                 <td style={styles.td}>{p.name}</td>
                                 <td style={styles.td}>S/ {p.price}</td>
-                                <td style={styles.td}>{p.category?.name || '-'}</td>
+                                <td style={styles.td}>{p.category?.name || 'General'}</td>
                                 <td style={styles.td}>{p.stock}</td>
                                 <td style={styles.td}>
-                                    {/* Botón EDITAR */}
-                                    <button 
-                                        onClick={() => handleOpenEdit(p)} 
-                                        style={styles.actionBtn} 
-                                        title="Editar"
-                                    >
-                                        ✏️
-                                    </button>
-                                    
-                                    {/* Botón ELIMINAR */}
-                                    <button 
-                                        onClick={() => handleDelete(p._id)} 
-                                        style={styles.actionBtn} 
-                                        title="Eliminar"
-                                    >
-                                        🗑️
-                                    </button>
+                                    <button onClick={() => handleOpenEdit(p)} style={styles.actionBtn} title="Editar">✏️</button>
+                                    <button onClick={() => handleDelete(p._id)} style={styles.actionBtn} title="Eliminar">🗑️</button>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
-                <Pagination currentPage={1} totalPages={1} onPageChange={()=>{}} />
             </div>
             
             <AddProductForm 
                 isOpen={isModalOpen} 
                 onClose={() => setIsModalOpen(false)} 
                 onSave={handleSaveProduct} 
-                initialData={editingProduct} // Pasamos el producto a editar (o null)
+                initialData={editingProduct} 
             />
         </div>
     );

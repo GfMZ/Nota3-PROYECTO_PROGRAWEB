@@ -1,45 +1,51 @@
-
-
-import Category from '../models/Category.js';
+import Category from '../Models/Categories.js'; // <-- Apunta a Categories.js
 
 export const createCategory = async (req, res) => {
-  const { name, description } = req.body;
-
   try {
-    const newCategory = new Category({ name, description });
-    const savedCategory = await newCategory.save();
-    res.status(201).json(savedCategory); 
-
+    const category = await Category.create(req.body);
+    res.status(201).json({ ...category.toJSON(), _id: category.id });
   } catch (error) {
-    if (error.code === 11000) { 
-        return res.status(400).json({ message: 'Esa categoría ya existe.' });
-    }
-    res.status(500).json({ message: 'Error al crear la categoría', error: error.message });
+    if (error.name === 'SequelizeUniqueConstraintError') return res.status(400).json({ message: 'Categoría ya existe' });
+    res.status(500).json({ message: error.message });
   }
 };
 
 export const getCategories = async (req, res) => {
   try {
-    const categories = await Category.find().sort({ name: 1 });
-    res.status(200).json(categories);
-    
+    const categories = await Category.findAll({ order: [['name', 'ASC']] });
+    const formatted = categories.map(c => ({ ...c.toJSON(), _id: c.id }));
+    res.status(200).json(formatted);
   } catch (error) {
-    res.status(500).json({ message: 'Error al listar categorías', error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
 export const deleteCategory = async (req, res) => {
-    const { id } = req.params; 
+  try {
+    const deleted = await Category.destroy({ where: { id: req.params.id } });
+    if (!deleted) return res.status(404).json({ message: 'No encontrada' });
+    res.json({ message: 'Eliminada' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
+export const updateCategory = async (req, res) => {
     try {
-        const deletedCategory = await Category.findByIdAndDelete(id);
+        const [updatedRows] = await Category.update(req.body, {
+            where: { id: req.params.id }
+        });
 
-        if (!deletedCategory) {
-            return res.status(404).json({ message: 'Categoría no encontrada.' });
+        if (updatedRows === 0) {
+            return res.status(404).json({ message: 'Categoría no encontrada' });
         }
-        res.status(200).json({ message: 'Categoría eliminada con éxito', deletedCategory });
+
+        const updatedCategory = await Category.findByPk(req.params.id);
+
+        // Mapeamos para mantener la compatibilidad con el front (_id)
+        res.json({ ...updatedCategory.toJSON(), _id: updatedCategory.id });
 
     } catch (error) {
-        res.status(500).json({ message: 'Error al eliminar la categoría', error: error.message });
+        res.status(500).json({ message: error.message });
     }
 };

@@ -24,6 +24,9 @@ import AboutPage from './pages/AboutPage.jsx';
 import OffersPage from './pages/OffersPage.jsx';
 import ProductListAdmin from './pages/ProductListAdmin.jsx';
 import AdminOrdersPage from './pages/AdminOrdersPage.jsx';
+import AdminUsersPage from './pages/AdminUsersPage.jsx';
+import ForgotPasswordPage from './pages/ForgotPasswordPage.jsx';
+import ResetPasswordPage from './pages/ResetPasswordPage.jsx';
 
 const router = createBrowserRouter([
   {
@@ -48,6 +51,9 @@ const router = createBrowserRouter([
       { path: 'ofertas', element: <OffersPage /> },
       { path: 'admin/ordenes', element: <AdminOrdersPage /> },
       { path: 'admin/productos', element: <ProductListAdmin /> },
+      { path: 'admin/usuarios', element: <AdminUsersPage /> },
+      { path: 'forgot-password', element: <ForgotPasswordPage /> },
+      { path: 'reset-password/:token', element: <ResetPasswordPage /> },
       
     ],
   },

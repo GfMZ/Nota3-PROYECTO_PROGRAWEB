@@ -4,19 +4,23 @@ import { fetchCategories } from '../services/productService';
 export default function AddProductForm({ isOpen, onClose, onSave, initialData }) {
     if (!isOpen) return null;
 
-
     const [formData, setFormData] = useState({
-        name: '', description: '', price: '', stock: '', imageUrl: '', categoryId: ''
+        name: '', 
+        description: '', 
+        brand: '', // NUEVO CAMPO POSTGRES
+        price: '', 
+        stock: '', 
+        imageUrl: '', 
+        categoryId: ''
     });
     const [categories, setCategories] = useState([]);
 
- 
     useEffect(() => {
         const loadCats = async () => {
             try {
                 const data = await fetchCategories();
                 setCategories(data);
-
+                // Si es crear nuevo y hay categorías, pre-seleccionar la primera
                 if (!initialData && data.length > 0) {
                     setFormData(prev => ({ ...prev, categoryId: data[0]._id }));
                 }
@@ -25,23 +29,27 @@ export default function AddProductForm({ isOpen, onClose, onSave, initialData })
         loadCats();
     }, [initialData]); 
 
-
     useEffect(() => {
         if (initialData) {
             setFormData({
-                name: initialData.name,
-                description: initialData.description,
-                price: initialData.price,
-                stock: initialData.stock,
-                imageUrl: initialData.imageUrl,
-                
-                categoryId: initialData.category?._id || initialData.category || ''
+                name: initialData.name || '',
+                description: initialData.description || '',
+                brand: initialData.brand || '', // Cargar Marca existente
+                price: initialData.price || 0,
+                stock: initialData.stock || 0,
+                imageUrl: initialData.imageUrl || '',
+                // Manejo robusto de categoría anidada vs ID plano
+                categoryId: initialData.category?._id || initialData.category?.id || initialData.categoryId || ''
             });
         } else {
             // Limpiar si es modo crear
-            setFormData({ name: '', description: '', price: '', stock: '', imageUrl: '', categoryId: categories[0]?._id || '' });
+            setFormData({ 
+                name: '', description: '', brand: '', 
+                price: '', stock: '', imageUrl: '', 
+                categoryId: categories[0]?._id || '' 
+            });
         }
-    }, [initialData, categories]); // Se ejecuta cuando cambia el producto a editar
+    }, [initialData, categories]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -49,11 +57,15 @@ export default function AddProductForm({ isOpen, onClose, onSave, initialData })
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSave(formData); 
-        
+        // Conversión estricta para PostgreSQL
+        onSave({
+            ...formData,
+            price: parseFloat(formData.price),
+            stock: parseInt(formData.stock, 10)
+        }); 
     };
-
     
+    // Estilos (sin cambios)
     const modalStyles = {
         overlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 },
         content: { background: 'white', padding: '30px', borderRadius: '8px', width: '500px', maxHeight: '90vh', overflowY: 'auto' },
@@ -65,12 +77,14 @@ export default function AddProductForm({ isOpen, onClose, onSave, initialData })
     return (
         <div style={modalStyles.overlay}>
             <div style={modalStyles.content}>
-                
                 <h2>{initialData ? 'Editar Producto' : 'Nuevo Producto'}</h2>
-                
                 <form onSubmit={handleSubmit}>
                     <label style={modalStyles.label}>Nombre</label>
                     <input name="name" value={formData.name} style={modalStyles.input} onChange={handleChange} required />
+
+                    {/* NUEVO CAMPO MARCA */}
+                    <label style={modalStyles.label}>Marca</label>
+                    <input name="brand" value={formData.brand} style={modalStyles.input} onChange={handleChange} placeholder="Ej: Sony, Razer..." />
 
                     <label style={modalStyles.label}>Descripción</label>
                     <textarea name="description" value={formData.description} style={{...modalStyles.input, height: '80px'}} onChange={handleChange} required />

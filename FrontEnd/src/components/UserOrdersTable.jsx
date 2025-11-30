@@ -48,124 +48,74 @@ const styles = {
 };
 
 export default function UserOrdersTable() {
+    // ... (Hooks y lógica se mantienen igual) ...
     const { getAuthHeader, user } = useAuth(); 
     const [orders, setOrders] = useState([]);  
     const [isLoading, setIsLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     
-    // --- CARGA DE DATOS ---
+    // ... (loadOrders y useEffect se mantienen igual) ...
     const loadOrders = useCallback(async () => {
-        if (!user) {
-            setIsLoading(false);
-            return;
-        }
+        if (!user) { setIsLoading(false); return; }
         setIsLoading(true);
         try {
-            
             const data = await fetchMyOrders(getAuthHeader());
             setOrders(data);
-        } catch (error) {
-            console.error("Error cargando mis órdenes:", error);
-        } finally {
-            setIsLoading(false);
-        }
+        } catch (error) { console.error("Error:", error); } 
+        finally { setIsLoading(false); }
     }, [user, getAuthHeader]);
 
+    useEffect(() => { loadOrders(); }, [loadOrders]);
     
-    useEffect(() => {
-        loadOrders();
-    }, [loadOrders]);
+    // ... (Renderizado de carga y vacío igual) ...
 
-    
-    // --- PAGINACIÓN ---
-    const pageNumbers = [1]; 
-    const maxPage = 1; 
-    
-    const handlePageChange = (page) => {
-        if (typeof page === 'number' && page >= 1 && page <= maxPage) {
-            setCurrentPage(page);
-        }
-    };
-    
-    // Estados para hover
-    const [hoveredRow, setHoveredRow] = useState(null);
-    const [hoveredLink, setHoveredLink] = useState(null);
-    const [hoveredButton, setHoveredButton] = useState(null);
-
-    // Renderizado de carga
-    if (isLoading) {
-        return <div style={{...styles.wrapper, textAlign: 'center'}}>Cargando historial...</div>;
-    }
-
-    if (orders.length === 0) {
-        return <div style={{...styles.wrapper, textAlign: 'center'}}>No tienes órdenes registradas aún.</div>;
-    }
+    if (isLoading) return <div style={{padding:'24px', textAlign:'center'}}>Cargando...</div>;
+    if (orders.length === 0) return <div style={{padding:'24px', textAlign:'center'}}>No tienes órdenes.</div>;
 
     return (
-        <div style={styles.wrapper}>
-            <h2 style={styles.title}>Mis Órdenes ({orders.length})</h2>
+        <div style={{ backgroundColor: 'white', padding: '24px', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+            <h2 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '20px' }}>Mis Órdenes ({orders.length})</h2>
             
-            <div style={styles.tableWrapper}>
-                <table style={styles.table}>
-                    <thead style={styles.tableHeader}>
+            <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                    <thead style={{ backgroundColor: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
                         <tr>
-                            <th style={styles.th}>#ID</th>
-                            <th style={styles.th}>Fecha</th>
-                            <th style={styles.th}>Estado</th> 
-                            <th style={styles.th}>Total</th>
-                            <th style={{...styles.th, ...styles.thCenter}}>Acciones</th>
+                            <th style={{ padding: '12px' }}>#ID</th>
+                            <th style={{ padding: '12px' }}>Fecha</th>
+                            <th style={{ padding: '12px' }}>Estado</th> 
+                            <th style={{ padding: '12px' }}>Total</th>
+                            <th style={{ padding: '12px', textAlign: 'center' }}>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {orders.map((order, index) => {
-                            const rowStyle = { 
-                                ...styles.tr, 
-                                ...(hoveredRow === index ? styles.trHover : {}) 
-                            };
-                            
-                            
+                        {orders.map((order) => {
                             const date = new Date(order.createdAt).toLocaleDateString();
                             
-                            const displayId = order._id.slice(-6).toUpperCase();
+                            // --- CORRECCIÓN AQUÍ ---
+                            // Convertimos a String explícitamente antes de hacer slice
+                            // Si el ID es 15, String(15) es "15", y el slice funciona.
+                            const idStr = String(order._id || order.id);
+                            const displayId = idStr.length > 6 ? idStr.slice(-6).toUpperCase() : idStr; 
+                            
                             const status = order.isPaid ? 'Pagado' : 'Pendiente';
-
+                            
                             return (
-                                <tr 
-                                    key={order._id} 
-                                    style={rowStyle}
-                                    onMouseOver={() => setHoveredRow(index)}
-                                    onMouseOut={() => setHoveredRow(null)}
-                                >
-                                    <td style={styles.td}>
-                                        <Link 
-                                            to={`/orden/detalles/${order._id}`} 
-                                            style={{ 
-                                                ...styles.idLink, 
-                                                ...(hoveredLink === `id-${index}` ? styles.idLinkHover : {}) 
-                                            }}
-                                            onMouseOver={() => setHoveredLink(`id-${index}`)}
-                                            onMouseOut={() => setHoveredLink(null)}
-                                        >
+                                <tr key={order._id || order.id} style={{ borderBottom: '1px solid #eee' }}>
+                                    <td style={{ padding: '16px' }}>
+                                        <Link to={`/orden/detalles/${order._id || order.id}`} style={{ fontWeight: 'bold', color: '#2e9b1f', textDecoration:'none' }}>
                                             #{displayId}
                                         </Link>
                                     </td>
-                                    <td style={styles.td}>{date}</td>
-                                    <td style={styles.td}>
-                                        <span style={{ color: order.isPaid ? '#2e9b1f' : '#f59e0b', fontWeight: 'bold', fontSize: '12px' }}>
+                                    <td style={{ padding: '16px' }}>{date}</td>
+                                    <td style={{ padding: '16px' }}>
+                                        <span style={{ color: order.isPaid ? '#2e9b1f' : '#f59e0b', fontWeight: 'bold' }}>
                                             {status}
                                         </span>
                                     </td>
-                                    <td style={{...styles.td, ...styles.totalText}}>S/ {order.totalPrice.toFixed(2)}</td>
-                                    <td style={{...styles.td, ...styles.actionCenter}}>
-                                        <Link to={`/orden/detalles/${order._id}`}>
-                                            <button 
-                                                style={{ 
-                                                    ...styles.actionButton, 
-                                                    ...(hoveredButton === `action-${index}` ? styles.actionButtonHover : {}) 
-                                                }}
-                                                onMouseOver={() => setHoveredButton(`action-${index}`)}
-                                                onMouseOut={() => setHoveredButton(null)}
-                                            >
+                                    <td style={{ padding: '16px', fontWeight:'bold' }}>S/ {order.totalPrice.toFixed(2)}</td>
+                                    <td style={{ padding: '16px', textAlign: 'center' }}>
+                                        <Link to={`/orden/detalles/${order._id || order.id}`}>
+                                            <button style={{ backgroundColor: '#2e9b1f', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '6px', cursor:'pointer' }}>
                                                 Ver detalle
                                             </button>
                                         </Link>
@@ -175,13 +125,6 @@ export default function UserOrdersTable() {
                         })}
                     </tbody>
                 </table>
-            </div>
-            
-            
-            <div style={styles.paginationWrapper}>
-                <button disabled style={{ ...styles.navButton, opacity: 0.5 }}><ChevronLeft size={18} /></button>
-                <button style={styles.pageButtonActive}>1</button>
-                <button disabled style={{ ...styles.navButton, opacity: 0.5 }}><ChevronRight size={18} /></button>
             </div>
         </div>
     );

@@ -1,73 +1,60 @@
-
-
-import Cart from '../models/Cart.js';
-import Product from '../models/Product.js'; 
+import Cart from '../Models/Cart.js';
+import { CartItem } from '../Models/Cart.js';
+import Product from '../Models/Products.js'; // <-- Apunta a Products.js
 
 export const getUserCart = async (req, res) => {
-    try {
-        const cart = await Cart.findOne({ user: req.user._id }).populate('items.product', 'stock');
+  try {
+    const [cart] = await Cart.findOrCreate({ 
+        where: { userId: req.user.id },
+        defaults: { userId: req.user.id }
+    });
 
-        if (cart) {
-            res.status(200).json(cart);
-        } else {
-            res.status(200).json({ user: req.user._id, items: [] });
-        }
-    } catch (error) {
-        res.status(500).json({ message: 'Error al obtener el carrito', error: error.message });
-    }
+    const items = await CartItem.findAll({
+        where: { cartId: cart.id },
+        include: [{ model: Product, as: 'product' }]
+    });
+    
+    const formattedItems = items.map(item => ({
+        product: { _id: item.product.id, ...item.product.toJSON() },
+        productId: item.product.id,
+        id: item.product.id,
+        name: item.product.name,
+        imageUrl: item.product.imageUrl,
+        price: item.product.price,
+        quantity: item.quantity
+    }));
+
+    res.json({ items: formattedItems });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 export const addOrUpdateCartItem = async (req, res) => {
     const { productId, quantity } = req.body;
-    const userId = req.user._id;
-
+    const userId = req.user.id;
     try {
-        const product = await Product.findById(productId);
-        if (!product) {
-            return res.status(404).json({ message: 'Producto no encontrado.' });
-        }
-        
-        let cart = await Cart.findOne({ user: userId });
-        if (!cart) {
-            cart = new Cart({ user: userId, items: [] });
-        }
+        const [cart] = await Cart.findOrCreate({ where: { userId }, defaults: { userId } });
+        const item = await CartItem.findOne({ where: { cartId: cart.id, productId } });
 
-        const itemIndex = cart.items.findIndex(item => item.product.toString() === productId);
-
-        if (itemIndex > -1) {
-            // Actualizar cantidad (o eliminar si es <= 0)
-            cart.items[itemIndex].quantity = quantity; 
-            if (cart.items[itemIndex].quantity <= 0) {
-                 cart.items.splice(itemIndex, 1);
-            }
+        if (item) {
+            if (quantity <= 0) await item.destroy();
+            else await item.update({ quantity });
         } else if (quantity > 0) {
-            // Agregar nuevo ítem
-            cart.items.push({
-                product: productId,
-                name: product.name,
-                imageUrl: product.imageUrl,
-                price: product.price,
-                quantity: quantity
-            });
+            await CartItem.create({ cartId: cart.id, productId, quantity });
         }
-        
-        const updatedCart = await cart.save();
-        res.status(200).json(updatedCart);
-
+        res.json({ message: 'Carrito actualizado' }); 
     } catch (error) {
-        res.status(500).json({ message: 'Error al actualizar el carrito', error: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
 export const clearCart = async (req, res) => {
     try {
-        const deletedCart = await Cart.findOneAndDelete({ user: req.user._id });
-
-        if (!deletedCart) {
-            return res.status(200).json({ message: 'El carrito ya estaba vacío.', items: [] });
-        }
-        res.status(200).json({ message: 'Carrito vaciado con éxito.', items: [] });
+        const cart = await Cart.findOne({ where: { userId: req.user.id }});
+        if (cart) await CartItem.destroy({ where: { cartId: cart.id } });
+        res.json({ message: 'Carrito vaciado', items: [] });
     } catch (error) {
-        res.status(500).json({ message: 'Error al vaciar el carrito', error: error.message });
+        res.status(500).json({ message: error.message });
     }
 };

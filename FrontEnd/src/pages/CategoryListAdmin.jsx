@@ -4,20 +4,22 @@ import CategoryTable from '../components/CategoryTable';
 import Pagination from '../components/Pagination';
 import AddCategoryForm from '../components/AddCategoryForm';
 import { useAuth } from '../context/AuthContext';
-// IMPORTANTE: Importar servicios
 import { fetchCategories } from '../services/productService'; 
+// CORRECCIÓN: Importamos TODAS las funciones de administración que vamos a usar
+import { createCategory, deleteCategory, updateCategory } from '../services/adminService'; 
 
 export default function CategoryListAdmin() {
     const { user, getAuthHeader } = useAuth();
     const isAdmin = user && user.role === 'admin';
 
     const [isModalOpen, setIsModalOpen] = useState(false); 
-    const [categories, setCategories] = useState([]); // Array vacío inicial
+    const [categories, setCategories] = useState([]); 
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const totalPages = 10; 
+    
+    const [editingCategory, setEditingCategory] = useState(null); 
 
-    // CARGAR DESDE API
     const loadCategories = useCallback(async () => {
         try {
             const data = await fetchCategories();
@@ -27,12 +29,10 @@ export default function CategoryListAdmin() {
         }
     }, []);
 
-    useEffect(() => {
-        loadCategories();
-    }, [loadCategories]);
+    useEffect(() => { loadCategories(); }, [loadCategories]);
 
-    // FILTRADO
     const filteredCategories = useMemo(() => {
+        // ... (lógica de filtrado se mantiene igual)
         if (!searchTerm) return categories;
         const lowerCaseSearch = searchTerm.toLowerCase();
         return categories.filter(category => (
@@ -43,44 +43,51 @@ export default function CategoryListAdmin() {
     }, [categories, searchTerm]);
 
     const handlePageChange = (page) => setCurrentPage(page);
-    const handleOpenModal = () => setIsModalOpen(true);
-    const handleCloseModal = () => setIsModalOpen(false);
+    const handleOpenEdit = (category) => {
+        setEditingCategory(category);
+        setIsModalOpen(true);
+    };
+    const handleOpenCreate = () => {
+        setEditingCategory(null);
+        setIsModalOpen(true);
+    };
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setEditingCategory(null);
+    };
 
-    // AGREGAR (API)
-    const handleAddCategory = async (newCategoryData) => {
+    // --- CORRECCIÓN DE LÓGICA: USAR SERVICIOS (POST/PUT) ---
+    const handleSaveCategory = async (categoryData) => {
         if (!isAdmin) return alert("No tienes permisos.");
         try {
-            const response = await fetch('http://localhost:4000/api/categories', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
-                body: JSON.stringify(newCategoryData)
-            });
-            if (response.ok) {
-                loadCategories(); // Recargar lista
-                handleCloseModal();
+            if (editingCategory) {
+                // MODO EDICIÓN (PUT)
+                await updateCategory(editingCategory._id, categoryData, getAuthHeader());
+                alert('Categoría actualizada correctamente.');
             } else {
-                alert("Error al crear categoría");
+                // MODO CREACIÓN (POST)
+                await createCategory(categoryData, getAuthHeader());
+                alert('Categoría creada correctamente.');
             }
+            
+            loadCategories(); 
+            handleCloseModal();
+            
         } catch (error) {
-            console.error(error);
+            console.error("Error al guardar categoría:", error);
+            alert(`Error al guardar categoría: ${error.message}`);
         }
     };
 
-    // ELIMINAR (API)
+    // --- CORRECCIÓN DE LÓGICA: USAR SERVICIO (DELETE) ---
     const handleDeleteCategory = async (categoryId) => {
         if (!isAdmin) return alert("No tienes permisos.");
         try {
-            const response = await fetch(`http://localhost:4000/api/categories/${categoryId}`, {
-                method: 'DELETE',
-                headers: getAuthHeader()
-            });
-            if (response.ok) {
-                loadCategories(); // Recargar lista
-            } else {
-                alert("Error al eliminar");
-            }
+            await deleteCategory(categoryId, getAuthHeader());
+            loadCategories(); 
         } catch (error) {
             console.error(error);
+            alert("Error al eliminar categoría.");
         }
     };
 
@@ -96,15 +103,22 @@ export default function CategoryListAdmin() {
                         categories={filteredCategories} 
                         searchTerm={searchTerm} 
                         setSearchTerm={setSearchTerm} 
-                        onAddCategoryClick={isAdmin ? handleOpenModal : undefined} 
+                        
+                        onAddCategoryClick={isAdmin ? handleOpenCreate : undefined} 
+                        onEditCategory={isAdmin ? handleOpenEdit : undefined}     
+                        
                         onDeleteCategory={isAdmin ? handleDeleteCategory : undefined}
                         isAdmin={isAdmin}
-                    />
-                    <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+                    />      
                 </div>
             </div>
             {isAdmin && (
-                <AddCategoryForm isOpen={isModalOpen} onClose={handleCloseModal} onSave={handleAddCategory} />
+                <AddCategoryForm 
+                    isOpen={isModalOpen} 
+                    onClose={handleCloseModal} 
+                    onSave={handleSaveCategory} 
+                    initialData={editingCategory} 
+                />
             )}
         </div>
     );

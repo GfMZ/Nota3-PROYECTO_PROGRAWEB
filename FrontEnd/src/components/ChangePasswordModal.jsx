@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { Lock, X } from 'lucide-react';
+// --- IMPORTS AÑADIDOS ---
+import { useAuth } from '../context/AuthContext';
+import { changePassword } from '../services/authService'; 
+// ------------------------
 
 const inputStyle = {
     width: '100%',
@@ -63,7 +67,7 @@ const modalContentStyle = {
     position: 'relative',
 };
 
-export default function ChangePasswordModal({ isOpen, onClose, onSave }) {
+export default function ChangePasswordModal({ isOpen, onClose }) {
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -78,6 +82,8 @@ export default function ChangePasswordModal({ isOpen, onClose, onSave }) {
     const [isCancelHovered, setIsCancelHovered] = useState(false);
     const [isCloseHovered, setIsCloseHovered] = useState(false);
 
+    const { getAuthHeader } = useAuth(); // Obtenemos el token para el API
+
     if (!isOpen) return null;
 
     const handleSave = async (e) => { 
@@ -85,7 +91,7 @@ export default function ChangePasswordModal({ isOpen, onClose, onSave }) {
         setError('');
         setStatusMessage(null);
 
-        
+        // 1. Validaciones locales
         if (newPassword !== confirmPassword) {
             setError('Las nuevas contraseñas no coinciden.');
             return;
@@ -98,19 +104,20 @@ export default function ChangePasswordModal({ isOpen, onClose, onSave }) {
         setIsSaving(true); 
 
         try {
+            // 2. Llamada al servicio con las tres contraseñas y el token
+            const passwords = { oldPassword, newPassword };
+            const result = await changePassword(passwords, getAuthHeader());
             
-            await onSave({ oldPassword, newPassword });
-            
-            setStatusMessage('Contraseña cambiada exitosamente.');
+            // 3. Éxito
+            setStatusMessage(result.message || 'Contraseña cambiada exitosamente.');
             setOldPassword('');
             setNewPassword('');
             setConfirmPassword('');
             
-            
             setTimeout(onClose, 1500);
             
         } catch (err) {
-            // Mostrar error si la API falla (ej. contraseña incorrecta)
+            // 4. Fallo (ej: contraseña antigua incorrecta)
             setError(err.message || 'Error al cambiar la contraseña.');
         } finally {
             setIsSaving(false); 

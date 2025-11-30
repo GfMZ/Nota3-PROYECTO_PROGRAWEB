@@ -35,3 +35,42 @@ export const loginUser = async (email, password) => {
 
     return data; 
 };
+
+export const changePassword = async (passwords, authHeader) => {
+    const response = await fetch(`${API_BASE_URL}/password`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            ...authHeader
+        },
+        body: JSON.stringify(passwords), // { oldPassword, newPassword }
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(data.message || 'Error desconocido al cambiar contraseña.');
+    }
+    return data;
+};
+
+export const requestPasswordReset = async (email) => {
+    const response = await fetch(`${API_BASE_URL}/forgot-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message || 'Error al solicitar restablecimiento.');
+    return data;
+};
+
+export const submitNewPassword = async (token, newPassword) => {
+    const response = await fetch(`${API_BASE_URL}/reset-password/${token}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ newPassword }),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message || 'Error al establecer nueva contraseña.');
+    return data;
+};

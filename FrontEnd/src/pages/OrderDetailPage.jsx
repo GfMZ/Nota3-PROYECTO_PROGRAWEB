@@ -50,7 +50,8 @@ export default function OrderDetailsPage() {
           
           <div style={{ display: "flex", flexDirection: "column", gap: "16px", borderBottom: "1px solid #e5e7eb", paddingBottom: "16px", marginBottom: "16px" }}>
             <h2 style={{ fontSize: "28px", fontWeight: "800", color: "#111827" }}>
-              Orden <span style={{ color: "#16a34a" }}>#{order._id.slice(-6).toUpperCase()}</span>
+              {/* CORRECCIÓN: Convertir a String antes de cortar */}
+              Orden <span style={{ color: "#16a34a" }}>#{String(order._id || order.id).slice(-6).toUpperCase()}</span>
             </h2>
 
             <div style={{ textAlign: "left" }}>

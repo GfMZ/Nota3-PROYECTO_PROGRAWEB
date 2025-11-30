@@ -1,48 +1,27 @@
+import { DataTypes } from 'sequelize';
+import sequelize from '../Config/database.js';
+import User from './Users.js';
+import Product from './Products.js';
 
+// Tabla CarritoDeCompra
+const Cart = sequelize.define('Cart', {
+  id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+  // userId se crea por la relación abajo
+}, { timestamps: false });
 
-import mongoose from 'mongoose';
-const { Schema } = mongoose;
+// Tabla ItemDeCarrito
+// Diagrama: Id, IdCarrito, IdProducto
+export const CartItem = sequelize.define('CartItem', {
+  id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+  quantity: { type: DataTypes.INTEGER, defaultValue: 1 } // Asumimos cantidad
+}, { timestamps: false });
 
-const cartItemSchema = new Schema({
-    product: {
-        type: Schema.Types.ObjectId,
-        ref: 'Product',
-        required: true,
-    },
-    name: { type: String, required: true },
-    imageUrl: { type: String },
-    price: { type: Number, required: true },
-    quantity: {
-        type: Number,
-        required: true,
-        min: 1,
-        default: 1,
-    },
-});
+// Relaciones
+Cart.belongsTo(User, { foreignKey: 'userId' }); // IdUsuario en Carrito
+Cart.hasMany(CartItem, { foreignKey: 'cartId', as: 'items' }); // IdCarrito en Item
+CartItem.belongsTo(Cart, { foreignKey: 'cartId' });
 
-const cartSchema = new Schema({
-    user: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
-        unique: true, 
-    },
-    items: [cartItemSchema], 
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    },
-    updatedAt: {
-        type: Date,
-        default: Date.now,
-    }
-});
-
-cartSchema.pre('save', function(next) {
-    this.updatedAt = Date.now();
-    next();
-});
-
-const Cart = mongoose.model('Cart', cartSchema);
+CartItem.belongsTo(Product, { foreignKey: 'productId', as: 'product' }); // IdProducto en Item
+Product.hasMany(CartItem, { foreignKey: 'productId' });
 
 export default Cart;

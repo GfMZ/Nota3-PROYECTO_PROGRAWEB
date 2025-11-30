@@ -116,22 +116,30 @@ export default function OrderProductTable({ items = [] }) {
                 </tr>
             </thead>
             <tbody style={{ borderTop: '1px solid #e5e7eb' }}>
-                {items.map((item, index) => (
-                    <OrderProductRow 
-                        key={index} 
-                        
-                        id={item.product ? String(item.product).slice(-6).toUpperCase() : 'N/A'} 
-                        name={item.name}
-                        
-                        category={item.category || ''} 
-                        quantity={item.quantity}
-                        total={`S/ ${(item.price * item.quantity).toFixed(2)}`}
-                        imageUrl={item.imageUrl}
-                    />
-                ))}
+                {items.map((item, index) => {
+                    // LÓGICA DE SEGURIDAD (PostgreSQL vs Legacy)
+                    
+                    // 1. Extraer ID: Si 'product' es un objeto (SQL), usamos .id. Si es string/num, lo usamos directo.
+                    const rawId = item.product?.id || item.product;
+                    const displayId = rawId ? String(rawId).slice(-6).toUpperCase() : 'N/A';
+
+                    // 2. Extraer Categoría: Ahora vive DENTRO del producto
+                    const categoryName = item.product?.category?.name || 'General';
+
+                    return (
+                        <OrderProductRow 
+                            key={index} 
+                            id={displayId} 
+                            name={item.name}
+                            category={categoryName} 
+                            quantity={item.quantity}
+                            total={`S/ ${(item.price * item.quantity).toFixed(2)}`}
+                            imageUrl={item.imageUrl}
+                        />
+                    );
+                })}
             </tbody>
         </table>
         </div>
     </div>
-  );
-}
+  );}

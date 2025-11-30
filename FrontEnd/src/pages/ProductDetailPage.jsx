@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ProductDetailView from '../components/ProductDetailView';
 import SimilarProducts from '../components/SimilarProducts';
-// Importar servicio
+// Importamos el servicio real
 import { fetchProductById } from '../services/productService';
 
 export default function ProductDetailPage() {
-  const { productId } = useParams();
+  const { productId } = useParams(); // Obtiene el ID de la URL
   const [product, setProduct] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -16,35 +16,42 @@ export default function ProductDetailPage() {
       setIsLoading(true);
       setError(null);
       try {
-        // Llamada real al backend
+        // Llamada a la API (Backend SQL)
         const data = await fetchProductById(productId);
         
-        // Formatear datos para la vista
+        // Aseguramos que los datos tengan el formato correcto para la vista
         const formattedProduct = {
             ...data,
-            id: data._id, // Importante para el carrito
-            category: data.category?.name || 'General'
+            id: data._id || data.id, // Compatibilidad ID
+            // Si la categoría viene poblada como objeto o string
+            category: data.category?.name || data.category || 'General' 
         };
-        setProduct(formattedProduct);
         
+        setProduct(formattedProduct);
       } catch (err) {
+        console.error(err);
         setError("Producto no encontrado o error de conexión.");
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadProduct();
+    if (productId) loadProduct();
   }, [productId]);
 
-  if (isLoading) return <div style={{ padding: '2rem', textAlign: 'center' }}>Cargando...</div>;
-  if (error || !product) return <div style={{ padding: '2rem', textAlign: 'center' }}>{error || "Producto no encontrado"}</div>;
+  if (isLoading) {
+    return <div style={{ padding: '4rem', textAlign: 'center' }}>Cargando detalles...</div>;
+  }
+
+  if (error || !product) {
+    return <div style={{ padding: '4rem', textAlign: 'center', color: 'red' }}>{error || "Producto no encontrado"}</div>;
+  }
 
   return (
     <div style={{ padding: '2rem' }}>
       <ProductDetailView product={product} />
-      {/* Pasamos array vacío a similares por ahora, o podrías cargar productos de la misma categoría */}
-      <SimilarProducts products={[]} />
+      {/* SimilarProducts puede quedar vacío o implementar lógica futura */}
+      <SimilarProducts products={[]} /> 
     </div>
   );
 }

@@ -95,6 +95,15 @@ const SideMenu = () => {
                 Órdenes
             </Link>
             
+            {/* 🛑 ENLACE AÑADIDO: USUARIOS 🛑 */}
+            <Link to="/admin/usuarios" style={getMenuItemStyle('/admin/usuarios')}>
+                <svg style={categoryIconStyles} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+                Usuarios
+            </Link>
+            {/* ---------------------------------- */}
+
             <div style={{...menuItemStyles, cursor: 'default', opacity: 0.5}}>
                 <svg style={categoryIconStyles} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FFC107"><path d="M20.5 4.5l-2.79 2.79-4.21-4.21-2.79 2.79L10 2l-8 8 2 2 8-8 8 8 2-2-8-8 8-8z"/></svg>
                 Ofertas (Próx.)

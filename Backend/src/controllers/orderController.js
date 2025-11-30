@@ -1,84 +1,160 @@
+// backend/controllers/orderController.js
 
+import Order, { OrderItem } from '../Models/Order.js';
+import Cart, { CartItem } from '../Models/Cart.js';
+import User from '../Models/Users.js';
 
-import Order from '../models/Order.js';
-import Cart from '../models/Cart.js'; 
-
+// --- IMPORTANTE: ESTOS ERAN LOS QUE FALTABAN ---
+import Product from '../Models/Products.js';
+import Category from '../Models/Categories.js'; 
+// -----------------------------------------------
 
 export const createOrder = async (req, res) => {
-    
-    const { orderItems, shippingAddress, paymentMethod, totalPrice } = req.body; 
-
-    
-    const userId = req.user._id;
-
-    if (orderItems && orderItems.length === 0) {
-        return res.status(400).json({ message: 'No hay productos en la orden.' });
+    const { orderItems, shippingAddress, paymentMethod, totalPrice } = req.body;
+    // Validación de seguridad: si no hay items, no creamos nada
+    if (!orderItems || orderItems.length === 0) {
+        return res.status(400).json({ message: 'No hay ítems en la orden' });
     }
+
+    const userId = req.user.id;
 
     try {
-        
-        const order = new Order({
-            user: userId, 
-            orderItems,
-            shippingAddress,
+        const order = await Order.create({
+            userId,
+            shippingAddress: typeof shippingAddress === 'string' ? shippingAddress : JSON.stringify(shippingAddress),
             paymentMethod,
-            totalPrice,
-            isPaid: true, 
-            paidAt: Date.now(),
+            total: totalPrice,
+            subTotal: totalPrice,
+            isPaid: true, // Asumimos pagado para este flujo simplificado
+            paidAt: new Date()
         });
 
-        const createdOrder = await order.save();
+        // Mapeamos los items para guardarlos
+        const itemsData = orderItems.map(item => ({
+            orderId: order.id,
+            productId: item.product || item.productId, // Manejamos ambas variantes por seguridad
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price,
+            imageUrl: item.imageUrl
+        }));
         
+        await OrderItem.bulkCreate(itemsData);
+
+        // Limpiamos el carrito del usuario
+        const cart = await Cart.findOne({ where: { userId } });
+        if (cart) await CartItem.destroy({ where: { cartId: cart.id }});
+
+        // Devolvemos la orden con los items
+        const fullOrder = await Order.findByPk(order.id, { include: [{ model: OrderItem, as: 'orderItems' }] });
         
-        await Cart.findOneAndDelete({ user: userId });
-        
-        
-        res.status(201).json(createdOrder);
+        res.status(201).json({ 
+            ...fullOrder.toJSON(), 
+            _id: fullOrder.id, 
+            totalPrice: fullOrder.total 
+        });
 
     } catch (error) {
-        res.status(500).json({ message: 'Error al crear la orden', error: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
-
 
 export const getMyOrders = async (req, res) => {
     try {
-       
-        const orders = await Order.find({ user: req.user._id }).sort({ createdAt: -1 });
-        res.json(orders);
+        const orders = await Order.findAll({
+            where: { userId: req.user.id },
+            include: [{ model: OrderItem, as: 'orderItems' }],
+            order: [['createdAt', 'DESC']]
+        });
+        const formatted = orders.map(o => ({ 
+            ...o.toJSON(), 
+            _id: o.id,
+            totalPrice: o.total 
+        }));
+        res.json(formatted);
     } catch (error) {
-        res.status(500).json({ message: 'Error al obtener órdenes', error: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
-
-
-export const getOrderById = async (req, res) => {
-    try {
-        
-        const order = await Order.findById(req.params.id).populate('user', 'name email');
-
-        if (!order) {
-            return res.status(404).json({ message: 'Orden no encontrada.' });
-        }
-        
-        
-        if (order.user._id.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
-             return res.status(403).json({ message: 'Acceso denegado.' });
-        }
-
-        res.json(order);
-    } catch (error) {
-        res.status(500).json({ message: 'Error al obtener la orden', error: error.message });
-    }
-};
-
 
 export const getAllOrders = async (req, res) => {
     try {
-        
-        const orders = await Order.find().populate('user', 'name email').sort({ createdAt: -1 });
-        res.json(orders);
+        const orders = await Order.findAll({
+            include: [
+                { 
+                    model: User, 
+                    as: 'user', 
+                    attributes: ['firstName', 'lastName', 'email'] 
+                },
+                { model: OrderItem, as: 'orderItems' }
+            ],
+            order: [['createdAt', 'DESC']]
+        });
+
+        const formatted = orders.map(o => {
+            const json = o.toJSON();
+            const u = json.user;
+            const fullName = u ? `${u.firstName} ${u.lastName}` : 'Desconocido';
+
+            return { 
+                ...json, 
+                _id: o.id, 
+                totalPrice: o.total,
+                user: { ...u, name: fullName }
+            };
+        });
+
+        res.json(formatted);
     } catch (error) {
-        res.status(500).json({ message: 'Error al obtener todas las órdenes', error: error.message });
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// --- FUNCIÓN CORREGIDA FINALMENTE ---
+export const getOrderById = async (req, res) => {
+    try {
+        const order = await Order.findByPk(req.params.id, {
+            include: [
+                { 
+                    model: User, 
+                    as: 'user', 
+                    attributes: ['firstName', 'lastName', 'email'] 
+                },
+                { 
+                    model: OrderItem, 
+                    as: 'orderItems',
+                    include: [
+                        {
+                            model: Product,
+                            as: 'product', // <--- ¡ALIAS CORREGIDO A 'product' AÑADIDO AQUÍ!
+                            attributes: ['id', 'name', 'imageUrl'],
+                            include: [
+                                {
+                                    model: Category,
+                                    as: 'category',
+                                    attributes: ['name']
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        });
+
+        if (!order) return res.status(404).json({ message: 'No encontrada' });
+        
+        const json = order.toJSON();
+        const u = json.user;
+        const fullName = u ? `${u.firstName} ${u.lastName}` : 'Desconocido';
+
+        res.json({ 
+            ...json, 
+            _id: order.id, 
+            totalPrice: json.total,
+            user: { ...u, name: fullName }
+        });
+    } catch (error) {
+        console.error(error); 
+        res.status(500).json({ message: error.message });
     }
 };

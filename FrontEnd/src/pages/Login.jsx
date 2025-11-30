@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles.css"; 
 import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // Importamos 'Link' para la navegación
 import { useAuth } from '../context/AuthContext'; 
 
 const Login = () => {
@@ -13,7 +13,7 @@ const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => { // Agregar async
+  const handleLogin = async (e) => {
     e.preventDefault(); 
     setMensaje(""); 
 
@@ -76,7 +76,21 @@ const Login = () => {
         </form>
 
         <div className="gp-login-links">
-          <a href="/registro">¿No tienes cuenta? Regístrate</a>
+          {/* Enlace para Crear Cuenta */}
+          <Link to="/registro">¿No tienes cuenta? Regístrate</Link>
+          
+          {/* 🛑 ENLACE AÑADIDO: OLVIDÉ MI CONTRASEÑA 🛑 */}
+          <Link 
+            to="/forgot-password" 
+            style={{ 
+              color: '#999', 
+              textDecoration: 'none', 
+              fontSize: '14px' 
+            }}
+          >
+            ¿Olvidaste tu contraseña?
+          </Link>
+          {/* ------------------------------------------- */}
         </div>
         {mensaje && (
           <div className="text-center mt-3 text-danger">{mensaje}</div>
