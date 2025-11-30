@@ -1,3 +1,5 @@
+// 🖥️ index.js
+
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -18,11 +20,15 @@ import cartRoutes from './src/routes/cartRoutes.js';
 import orderRoutes from './src/routes/orderRoutes.js';
 
 dotenv.config();
+// CAMBIO 1: process.env.PORT viene de Azure y siempre se usa.
+// Si no está definido (por ejemplo, en local sin .env), usa 4000.
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4000; 
 
 app.use(cors({
-  origin: ['http://localhost:5173'],
+  // CONSIDERACIÓN: En Azure, tendrás que cambiar 'http://localhost:5173'
+  // por el dominio de tu frontend si lo despliegas.
+  origin: ['http://localhost:5173'], 
   credentials: true
 }));
 app.use(express.json());
@@ -39,7 +45,8 @@ const startServer = async () => {
     console.log('✅ Conexión a PostgreSQL exitosa.');
     await sequelize.sync({ alter: true }); 
     console.log('✅ Tablas sincronizadas.');
-    app.listen(PORT, () => console.log(`🚀 Servidor en http://localhost:${PORT}`));
+    // CAMBIO 2: El log ahora es genérico (no usa localhost en la nube)
+    app.listen(PORT, () => console.log(`🚀 Servidor iniciado en el puerto ${PORT}`));
   } catch (error) {
     console.error('❌ Error de base de datos:', error);
   }
