@@ -25,14 +25,14 @@ export const createOrder = async (req, res) => {
             paymentMethod,
             total: totalPrice,
             subTotal: totalPrice,
-            isPaid: true, // Asumimos pagado para este flujo simplificado
+            isPaid: true, 
             paidAt: new Date()
         });
 
-        // Mapeamos los items para guardarlos
+        
         const itemsData = orderItems.map(item => ({
             orderId: order.id,
-            productId: item.product || item.productId, // Manejamos ambas variantes por seguridad
+            productId: item.product || item.productId, 
             name: item.name,
             quantity: item.quantity,
             price: item.price,
@@ -41,11 +41,11 @@ export const createOrder = async (req, res) => {
         
         await OrderItem.bulkCreate(itemsData);
 
-        // Limpiamos el carrito del usuario
+        
         const cart = await Cart.findOne({ where: { userId } });
         if (cart) await CartItem.destroy({ where: { cartId: cart.id }});
 
-        // Devolvemos la orden con los items
+        
         const fullOrder = await Order.findByPk(order.id, { include: [{ model: OrderItem, as: 'orderItems' }] });
         
         res.status(201).json({ 
@@ -110,7 +110,7 @@ export const getAllOrders = async (req, res) => {
     }
 };
 
-// --- FUNCIÓN CORREGIDA FINALMENTE ---
+
 export const getOrderById = async (req, res) => {
     try {
         const order = await Order.findByPk(req.params.id, {
@@ -126,7 +126,7 @@ export const getOrderById = async (req, res) => {
                     include: [
                         {
                             model: Product,
-                            as: 'product', // <--- ¡ALIAS CORREGIDO A 'product' AÑADIDO AQUÍ!
+                            as: 'product', 
                             attributes: ['id', 'name', 'imageUrl'],
                             include: [
                                 {

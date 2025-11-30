@@ -1,4 +1,4 @@
-import Category from '../Models/Categories.js'; // <-- Apunta a Categories.js
+import Category from '../Models/Categories.js'; 
 
 export const createCategory = async (req, res) => {
   try {
@@ -42,7 +42,7 @@ export const updateCategory = async (req, res) => {
 
         const updatedCategory = await Category.findByPk(req.params.id);
 
-        // Mapeamos para mantener la compatibilidad con el front (_id)
+
         res.json({ ...updatedCategory.toJSON(), _id: updatedCategory.id });
 
     } catch (error) {

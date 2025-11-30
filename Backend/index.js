@@ -3,10 +3,10 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import sequelize from './src/Config/database.js';
 
-// MODELOS: Importamos con los nombres PLURALES que tienes
-import './src/Models/Users.js';      // <-- Antes User.js
-import './src/Models/Categories.js'; // <-- Antes Category.js
-import './src/Models/Products.js';   // <-- Antes Product.js
+
+import './src/Models/Users.js';      
+import './src/Models/Categories.js'; 
+import './src/Models/Products.js';   
 import './src/Models/Cart.js';
 import './src/Models/Order.js';
 

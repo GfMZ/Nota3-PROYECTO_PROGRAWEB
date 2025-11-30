@@ -1,4 +1,4 @@
-// frontend/src/pages/AdminUsersPage.jsx
+
 
 import React from 'react';
 import SideMenu from '../components/SideMenu';
@@ -11,7 +11,7 @@ const styles = {
 };
 
 export default function AdminUsersPage() {
-    // Ya que esta página solo es accesible vía /admin, asumimos que el usuario es admin
+    
     
     return (
         <div style={styles.container}>

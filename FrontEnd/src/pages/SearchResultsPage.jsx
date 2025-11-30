@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import FilterSidebar from '../components/FilterSidebar';
 import SortControls from '../components/SortControls';
 import ProductList from '../components/ProductList';
-// Importamos servicios reales
+
 import { fetchProducts, fetchCategories } from '../services/productService';
 
 const pageStyles = {
@@ -28,7 +28,7 @@ export default function SearchResultsPage() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [sortOrder, setSortOrder] = useState('default');
 
-  // Carga inicial de datos
+
   useEffect(() => {
     const loadData = async () => {
       setIsLoading(true);
@@ -40,7 +40,7 @@ export default function SearchResultsPage() {
         setAllProducts(products);
         setCategoryNames(categories.map(c => c.name)); 
 
-        // Si la URL trae ?category=Consolas, preseleccionar filtro
+ 
         const urlCat = new URLSearchParams(location.search).get('category');
         if (urlCat) setSelectedCategory(urlCat);
 
@@ -53,7 +53,7 @@ export default function SearchResultsPage() {
     loadData();
   }, [location.search]);
 
-  // Filtrado en cliente
+
   const filteredProducts = useMemo(() => {
     let products = allProducts.filter(p =>
       p.name.toLowerCase().includes(query.toLowerCase()) ||
@@ -66,7 +66,7 @@ export default function SearchResultsPage() {
     return products;
   }, [query, selectedCategory, allProducts]);
 
-  // Ordenamiento y Mapeo de IDs
+
   const sortedProducts = useMemo(() => {
     const sorted = [...filteredProducts];
     switch (sortOrder) {
@@ -76,7 +76,7 @@ export default function SearchResultsPage() {
       case 'name-desc': sorted.sort((a, b) => b.name.localeCompare(a.name)); break;
       default: break;
     }
-    // Asegurar ID compatible
+
     return sorted.map(p => ({ ...p, id: p._id || p.id }));
   }, [filteredProducts, sortOrder]);
 

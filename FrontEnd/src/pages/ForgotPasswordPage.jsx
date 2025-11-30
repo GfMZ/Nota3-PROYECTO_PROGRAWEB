@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-// Asegúrate de importar el servicio correcto
 import { requestPasswordReset } from '../services/authService'; 
 import { Lock } from 'lucide-react';
 
@@ -64,11 +63,11 @@ export default function ForgotPasswordPage() {
         setMessage('');
 
         try {
-            // Llama a la función del backend para generar el token
+            
             const result = await requestPasswordReset(email);
             
             setIsError(false);
-            // Mensaje de éxito del backend (oculta si el email existe o no)
+            
             setMessage(result.message); 
             setEmail('');
 

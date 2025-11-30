@@ -1,24 +1,23 @@
-// backend/seed.js
+
 
 import sequelize from './src/Config/database.js';
 
-// IMPORTANTE: Ajustado a tu estructura (Carpeta 'Models' y archivos en Plural/Singular según corresponda)
+
 import Category from './src/Models/Categories.js';
 import Product from './src/Models/Products.js';
 import User from './src/Models/Users.js';
-import Cart from './src/Models/Cart.js';   // Estos suelen estar en singular o plural según tu archivo
-import Order from './src/Models/Order.js'; // Asegúrate de que coincida con el nombre real del archivo
+import Cart from './src/Models/Cart.js';  
+import Order from './src/Models/Order.js'; archivo
 
 const seedDatabase = async () => {
   try {
-    // 1. Reiniciar la Base de Datos (Borra y recrea tablas)
-    // force: true es lo que elimina los conflictos de tipos anteriores
+
     await sequelize.sync({ force: true });
     console.log('🔄 Base de datos limpiada y tablas creadas.');
 
     // 2. Crear Usuario Admin
     await User.create({
-      firstName: "Super", // Usar campos separados
+      firstName: "Super", 
       lastName: "Admin",
       email: "superadmin@test.com",
       password: "securepassword",
@@ -41,9 +40,9 @@ const seedDatabase = async () => {
     
     console.log('fyp Categorías creadas.');
 
-    // 4. Crear Productos (12 ítems)
+    // 4. Crear Productos 
     const products = [
-        // --- CONSOLAS ---
+
         {
             name: "Xbox Series X 1TB",
             description: "La Xbox más rápida y potente de la historia. 4K/120FPS.",
@@ -77,7 +76,7 @@ const seedDatabase = async () => {
             categoryId: catConsolas.id
         },
 
-        // --- PERIFÉRICOS ---
+
         {
             name: "Razer BlackWidow V3",
             description: "Teclado mecánico gaming con switches verdes táctiles y sonoros.",
@@ -111,7 +110,7 @@ const seedDatabase = async () => {
             categoryId: catPerifericos.id
         },
 
-        // --- CABLEADOS ---
+
         {
             name: "Cable HDMI 2.1 Ultra High Speed 8K",
             description: "Soporta 8K@60Hz y 4K@120Hz. Ideal para PS5 y Xbox Series X.",

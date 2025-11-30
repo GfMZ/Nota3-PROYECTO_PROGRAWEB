@@ -4,7 +4,7 @@ import { loginUser, registerUser } from '../services/authService';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    // Inicializamos leyendo 'userInfo' (estándar para guardar sesión)
+    
     const [user, setUser] = useState(() => {
         const storedUser = localStorage.getItem('userInfo');
         try {
@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
         }
     });
 
-    // Sincronizar con localStorage cada vez que 'user' cambie
+    
     useEffect(() => {
         if (user) {
             localStorage.setItem('userInfo', JSON.stringify(user));
@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
     const login = async (email, password) => {
         try {
             const data = await loginUser(email, password);
-            // data incluye: { _id, name, email, token, role }
+            
             setUser(data);
             return { success: true };
         } catch (error) {
@@ -50,8 +50,8 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         setUser(null);
         localStorage.removeItem('userInfo');
-        localStorage.removeItem('cartItems'); // Limpiamos carrito local también
-        window.location.href = '/login'; // Recarga forzada para limpiar estados
+        localStorage.removeItem('cartItems'); 
+        window.location.href = '/login'; 
     };
 
     // --- Obtener Header para Peticiones Protegidas ---

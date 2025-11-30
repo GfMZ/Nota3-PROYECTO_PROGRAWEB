@@ -5,7 +5,6 @@ import Pagination from '../components/Pagination';
 import AddCategoryForm from '../components/AddCategoryForm';
 import { useAuth } from '../context/AuthContext';
 import { fetchCategories } from '../services/productService'; 
-// CORRECCIÓN: Importamos TODAS las funciones de administración que vamos a usar
 import { createCategory, deleteCategory, updateCategory } from '../services/adminService'; 
 
 export default function CategoryListAdmin() {
@@ -32,7 +31,7 @@ export default function CategoryListAdmin() {
     useEffect(() => { loadCategories(); }, [loadCategories]);
 
     const filteredCategories = useMemo(() => {
-        // ... (lógica de filtrado se mantiene igual)
+        
         if (!searchTerm) return categories;
         const lowerCaseSearch = searchTerm.toLowerCase();
         return categories.filter(category => (
@@ -56,16 +55,16 @@ export default function CategoryListAdmin() {
         setEditingCategory(null);
     };
 
-    // --- CORRECCIÓN DE LÓGICA: USAR SERVICIOS (POST/PUT) ---
+    
     const handleSaveCategory = async (categoryData) => {
         if (!isAdmin) return alert("No tienes permisos.");
         try {
             if (editingCategory) {
-                // MODO EDICIÓN (PUT)
+                
                 await updateCategory(editingCategory._id, categoryData, getAuthHeader());
                 alert('Categoría actualizada correctamente.');
             } else {
-                // MODO CREACIÓN (POST)
+                
                 await createCategory(categoryData, getAuthHeader());
                 alert('Categoría creada correctamente.');
             }
@@ -79,7 +78,7 @@ export default function CategoryListAdmin() {
         }
     };
 
-    // --- CORRECCIÓN DE LÓGICA: USAR SERVICIO (DELETE) ---
+    
     const handleDeleteCategory = async (categoryId) => {
         if (!isAdmin) return alert("No tienes permisos.");
         try {

@@ -3,7 +3,7 @@ import { Lock } from 'lucide-react';
 import UserOrdersTable from '../components/UserOrdersTable';
 import UserDetailCard from '../components/UserDetailCard';
 import ChangePasswordModal from '../components/ChangePasswordModal';
-import { useAuth } from '../context/AuthContext'; // Importar Contexto Real
+import { useAuth } from '../context/AuthContext'; 
 
 // Estilos (Mismos que tenías)
 const headerContainerStyle = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', padding: '2rem 2rem 0 2rem' };
@@ -11,7 +11,7 @@ const titleStyle = { fontSize: '1.875rem', fontWeight: '800', color: '#1F2937' }
 const changePasswordButtonStyle = { backgroundColor: '#2563EB', color: 'white', fontWeight: '600', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', display: 'flex', alignItems: 'center', transition: 'background-color 150ms', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)', cursor: 'pointer', border: 'none' };
 
 export default function UserDetailsPage() { 
-    const { user } = useAuth(); // Obtener usuario real
+    const { user } = useAuth(); 
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false); 
     
     const handleOpenPasswordModal = () => setIsPasswordModalOpen(true);
@@ -25,7 +25,7 @@ export default function UserDetailsPage() {
         return <div style={{ padding: '40px', textAlign: 'center' }}>Inicia sesión para ver tu perfil.</div>;
     }
 
-    // Adaptamos el objeto user para la tarjeta
+    
     const userDataForCard = {
         name: user.name,
         email: user.email,
@@ -49,7 +49,7 @@ export default function UserDetailsPage() {
                 <div style={{ paddingLeft: '2rem', paddingRight: '2rem' }}> 
                     <UserDetailCard user={userDataForCard} /> 
                     
-                    {/* UserOrdersTable ahora es inteligente y busca sus propios datos */}
+                    
                     <div style={{ marginTop: '2rem' }}>
                         <UserOrdersTable /> 
                     </div>

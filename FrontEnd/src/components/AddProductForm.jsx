@@ -7,7 +7,7 @@ export default function AddProductForm({ isOpen, onClose, onSave, initialData })
     const [formData, setFormData] = useState({
         name: '', 
         description: '', 
-        brand: '', // NUEVO CAMPO POSTGRES
+        brand: '', 
         price: '', 
         stock: '', 
         imageUrl: '', 
@@ -34,7 +34,7 @@ export default function AddProductForm({ isOpen, onClose, onSave, initialData })
             setFormData({
                 name: initialData.name || '',
                 description: initialData.description || '',
-                brand: initialData.brand || '', // Cargar Marca existente
+                brand: initialData.brand || '', 
                 price: initialData.price || 0,
                 stock: initialData.stock || 0,
                 imageUrl: initialData.imageUrl || '',
@@ -65,7 +65,7 @@ export default function AddProductForm({ isOpen, onClose, onSave, initialData })
         }); 
     };
     
-    // Estilos (sin cambios)
+
     const modalStyles = {
         overlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 },
         content: { background: 'white', padding: '30px', borderRadius: '8px', width: '500px', maxHeight: '90vh', overflowY: 'auto' },
@@ -82,7 +82,7 @@ export default function AddProductForm({ isOpen, onClose, onSave, initialData })
                     <label style={modalStyles.label}>Nombre</label>
                     <input name="name" value={formData.name} style={modalStyles.input} onChange={handleChange} required />
 
-                    {/* NUEVO CAMPO MARCA */}
+
                     <label style={modalStyles.label}>Marca</label>
                     <input name="brand" value={formData.brand} style={modalStyles.input} onChange={handleChange} placeholder="Ej: Sony, Razer..." />
 

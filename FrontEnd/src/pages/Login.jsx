@@ -1,14 +1,14 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles.css"; 
 import { useState } from "react";
-import { useNavigate, Link } from 'react-router-dom'; // Importamos 'Link' para la navegación
+import { useNavigate, Link } from 'react-router-dom'; 
 import { useAuth } from '../context/AuthContext'; 
 
 const Login = () => {
   const [correo, setCorreo] = useState("");
   const [contra, setContra] = useState("");
   const [mensaje, setMensaje] = useState(""); 
-  const [cargando, setCargando] = useState(false); // Estado de carga visual
+  const [cargando, setCargando] = useState(false); 
   
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -24,15 +24,15 @@ const Login = () => {
 
     setCargando(true);
     
-    // Esperar la respuesta del backend
+    
     const result = await login(correo, contra);
 
     setCargando(false);
 
     if (result.success) {
-      navigate('/'); // Redirigir al Home si es exitoso
+      navigate('/'); 
     } else {
-      setMensaje(result.message); // Mostrar error del backend
+      setMensaje(result.message); 
     }
   };
 
@@ -76,10 +76,10 @@ const Login = () => {
         </form>
 
         <div className="gp-login-links">
-          {/* Enlace para Crear Cuenta */}
+
           <Link to="/registro">¿No tienes cuenta? Regístrate</Link>
           
-          {/* 🛑 ENLACE AÑADIDO: OLVIDÉ MI CONTRASEÑA 🛑 */}
+
           <Link 
             to="/forgot-password" 
             style={{ 
@@ -90,7 +90,7 @@ const Login = () => {
           >
             ¿Olvidaste tu contraseña?
           </Link>
-          {/* ------------------------------------------- */}
+          
         </div>
         {mensaje && (
           <div className="text-center mt-3 text-danger">{mensaje}</div>

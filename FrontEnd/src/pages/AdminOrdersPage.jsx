@@ -1,13 +1,13 @@
 import React from 'react';
 import SideMenu from '../components/SideMenu';
-import AdminOrdersTable from '../components/AdminOrdersTable'; // Importamos la tabla que ya arreglamos
+import AdminOrdersTable from '../components/AdminOrdersTable'; 
 import { useAuth } from '../context/AuthContext';
 
 export default function AdminOrdersPage() {
     const { user } = useAuth();
     const isAdmin = user && user.role === 'admin';
 
-    // Estilos para el layout (mismos que en ProductListAdmin y CategoryListAdmin)
+    
     const styles = {
         container: { 
             display: 'flex', 
@@ -19,7 +19,7 @@ export default function AdminOrdersPage() {
             padding: '20px', 
             display: 'flex', 
             flexDirection: 'column',
-            overflowY: 'auto' // Para que el contenido tenga scroll si es muy largo
+            overflowY: 'auto' 
         },
         header: {
             marginBottom: '20px',

@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-// CORRECCIÓN: Ruta relativa correcta desde 'models' a 'config'
+
 import sequelize from '../Config/database.js'; 
 
 const Category = sequelize.define('Category', {

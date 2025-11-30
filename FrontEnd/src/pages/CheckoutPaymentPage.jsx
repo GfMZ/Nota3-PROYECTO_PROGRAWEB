@@ -49,7 +49,7 @@ export default function CheckoutPaymentPage() {
             totalPrice: finalTotal,
         };
         
-        // 3. PASAR EL TOKEN (getAuthHeader()) COMO SEGUNDO ARGUMENTO
+        
         const createdOrder = await createOrder(orderPayload, getAuthHeader());
 
         clearCart(); 
@@ -63,10 +63,7 @@ export default function CheckoutPaymentPage() {
     }
   };
 
-  // ... (El resto del código JSX y estilos se mantiene IGUAL) ...
-  // Solo asegúrate de copiar el return que ya tenías.
-  
-  // (Para ahorrar espacio, mantengo el return implícito aquí, usa el de tu archivo actual)
+
   const baseButtonStyle = { display: 'flex', alignItems: 'center', gap: '1.5rem', padding: '1.5rem', border: '2px solid #eee', borderRadius: '8px', marginBottom: '1rem', cursor: 'pointer', transition: 'border-color 0.2s ease, box-shadow 0.2s ease' };
   const selectedButtonStyle = { borderColor: 'var(--green)', boxShadow: '0 4px 12px rgba(46, 155, 31, 0.2)' };
 

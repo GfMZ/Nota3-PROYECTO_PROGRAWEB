@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles.css";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // Importar AuthContext
+import { useAuth } from '../context/AuthContext'; 
 
 const Registro = () => {
   const [nombre, setNombre] = useState("");
@@ -12,10 +12,10 @@ const Registro = () => {
   const [pais, setPais] = useState("");
   
   const [mensaje, setMensaje] = useState("");
-  const [correoEnviado, setCorreoEnviado] = useState(false); // Usado para estilo de éxito/error
+  const [correoEnviado, setCorreoEnviado] = useState(false); 
   const [cargando, setCargando] = useState(false);
 
-  const { register } = useAuth(); // Usar la función real del contexto
+  const { register } = useAuth(); 
   const navigate = useNavigate();
 
   const onClick = async () => {
@@ -42,12 +42,12 @@ const Registro = () => {
 
     if (resultado.success) {
       setMensaje("✅ ¡Registro exitoso! Redirigiendo...");
-      setCorreoEnviado(true); // Estilo verde
-      // Redirigir al home después de 1.5 segundos
+      setCorreoEnviado(true); 
+
       setTimeout(() => navigate('/'), 1500);
     } else {
       setMensaje(`❌ ${resultado.message}`);
-      setCorreoEnviado(false); // Estilo rojo
+      setCorreoEnviado(false); 
     }
   };
 
@@ -57,7 +57,7 @@ const Registro = () => {
         <h2 className="gp-login-title text-center mb-3">Registro</h2>
         <p className="text-center mb-4">Ingresa los siguientes datos:</p>
 
-        {/* Inputs (Se mantienen igual, solo añadimos disabled={cargando}) */}
+
         <div className="gp-form-group">
           <label htmlFor="nombreRegis">Nombres</label>
           <input id="nombreRegis" type="text" placeholder="Tu nombre completo" value={nombre} onChange={(e) => setNombre(e.target.value)} disabled={cargando} />

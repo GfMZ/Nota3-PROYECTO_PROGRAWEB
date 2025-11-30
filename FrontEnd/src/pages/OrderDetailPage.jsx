@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import OrderProductTable from "../components/OrderProductTable";
 import { useAuth } from '../context/AuthContext';
-import { fetchOrderById } from '../services/orderService'; // Servicio real
+import { fetchOrderById } from '../services/orderService'; 
 
 export default function OrderDetailsPage() {
-  const { id } = useParams(); // ID de la orden desde la URL
+  const { id } = useParams(); 
   const { getAuthHeader } = useAuth();
   
   const [order, setOrder] = useState(null);
@@ -16,7 +16,7 @@ export default function OrderDetailsPage() {
     const loadOrder = async () => {
         setIsLoading(true);
         try {
-            // Llamada al backend: GET /api/orders/:id
+
             const data = await fetchOrderById(id, getAuthHeader());
             setOrder(data);
         } catch (err) {
@@ -71,7 +71,7 @@ export default function OrderDetailsPage() {
             </div>
           </div>
 
-          {/* Pasar los items reales a la tabla */}
+
           <OrderProductTable items={order.orderItems} />
           
         </div>

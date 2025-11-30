@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { useAuth } from './AuthContext';
-// Importamos los servicios para hablar con la Base de Datos
+
 import { fetchUserCart, syncCartItem, clearServerCart } from '../services/cartService';
 
 const CartContext = createContext();
@@ -16,31 +16,31 @@ export function CartProvider({ children }) {
   useEffect(() => {
     const loadCart = async () => {
         if (user) {
-            // A) USUARIO LOGUEADO: Cargar desde PostgreSQL
+            
             try {
                 const serverData = await fetchUserCart(getAuthHeader());
-                // El backend devuelve { items: [...] }
+                
                 setCart(serverData.items || []);
             } catch (error) {
                 console.error("Error sync DB cart:", error);
             }
         } else {
-            // B) INVITADO: Cargar desde LocalStorage
+            
             const storedCart = localStorage.getItem('cartItems');
             if (storedCart) setCart(JSON.parse(storedCart));
         }
     };
     loadCart();
-  }, [user]); // Se ejecuta al loguearse/desloguearse
+  }, [user]); 
 
-  // Helper para guardar en localStorage solo si es invitado
+  
   const saveLocal = (items) => {
     if (!user) localStorage.setItem('cartItems', JSON.stringify(items));
   };
 
   // --- AGREGAR ITEM ---
   const addToCart = async (product) => {
-    // 1. Lógica Optimista (Actualiza UI inmediatamente)
+    
     let newCart;
     const existing = cart.find(item => item.id === product.id);
     
@@ -54,11 +54,11 @@ export function CartProvider({ children }) {
     setCart(newCart);
     saveLocal(newCart);
 
-    // 2. Sincronización con DB (Si hay usuario)
+    // 2. Sincronización con DB 
     if (user) {
         try {
             const qty = existing ? existing.quantity + 1 : 1;
-            // Enviamos al backend: productId y la NUEVA cantidad total
+            
             await syncCartItem(product.id, qty, getAuthHeader());
         } catch (error) {
             console.error("Error saving to DB:", error);
@@ -74,7 +74,7 @@ export function CartProvider({ children }) {
 
     if (user) {
         try {
-            // Cantidad 0 para que el backend lo borre
+            
             await syncCartItem(productId, 0, getAuthHeader());
         } catch (error) { console.error(error); }
     }

@@ -1,6 +1,6 @@
 import Cart from '../Models/Cart.js';
 import { CartItem } from '../Models/Cart.js';
-import Product from '../Models/Products.js'; // <-- Apunta a Products.js
+import Product from '../Models/Products.js'; 
 
 export const getUserCart = async (req, res) => {
   try {

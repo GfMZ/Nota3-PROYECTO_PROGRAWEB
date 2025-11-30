@@ -6,7 +6,7 @@ import SimilarProducts from '../components/SimilarProducts';
 import { fetchProductById } from '../services/productService';
 
 export default function ProductDetailPage() {
-  const { productId } = useParams(); // Obtiene el ID de la URL
+  const { productId } = useParams(); 
   const [product, setProduct] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -16,14 +16,14 @@ export default function ProductDetailPage() {
       setIsLoading(true);
       setError(null);
       try {
-        // Llamada a la API (Backend SQL)
+
         const data = await fetchProductById(productId);
         
-        // Aseguramos que los datos tengan el formato correcto para la vista
+
         const formattedProduct = {
             ...data,
-            id: data._id || data.id, // Compatibilidad ID
-            // Si la categoría viene poblada como objeto o string
+            id: data._id || data.id, 
+
             category: data.category?.name || data.category || 'General' 
         };
         
@@ -50,7 +50,7 @@ export default function ProductDetailPage() {
   return (
     <div style={{ padding: '2rem' }}>
       <ProductDetailView product={product} />
-      {/* SimilarProducts puede quedar vacío o implementar lógica futura */}
+      
       <SimilarProducts products={[]} /> 
     </div>
   );

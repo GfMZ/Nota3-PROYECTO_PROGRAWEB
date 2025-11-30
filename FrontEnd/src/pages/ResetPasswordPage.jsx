@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Lock } from 'lucide-react';
-// Asegúrate de importar el servicio correcto
 import { submitNewPassword } from '../services/authService'; 
 
 const containerStyle = {
@@ -45,7 +44,7 @@ const buttonStyle = {
 };
 
 export default function ResetPasswordPage() {
-    const { token } = useParams(); // Capturamos el token de la URL
+    const { token } = useParams(); 
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [message, setMessage] = useState('');
@@ -72,13 +71,13 @@ export default function ResetPasswordPage() {
         setMessage('');
 
         try {
-            // Llama al servicio del backend para actualizar la contraseña
+
             const result = await submitNewPassword(token, newPassword);
             
             setIsError(false);
             setMessage(result.message); 
             
-            // Redirigir a login tras éxito
+
             setTimeout(() => {
                 navigate('/login');
             }, 3000);

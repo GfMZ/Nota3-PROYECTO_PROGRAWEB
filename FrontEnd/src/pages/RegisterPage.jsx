@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // 1. Importamos el contexto
+import { useAuth } from '../context/AuthContext'; 
 
 export default function RegisterPage() {
   const [nombre, setNombre] = useState("");
@@ -14,11 +14,11 @@ export default function RegisterPage() {
   const [esError, setEsError] = useState(false);
   const [cargando, setCargando] = useState(false);
 
-  const { register } = useAuth(); // 2. Sacamos la función de registro real
+  const { register } = useAuth(); 
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
-    // Es importante prevenir el comportamiento por defecto si está en un form
+
     if (e) e.preventDefault(); 
 
     // --- Validaciones Locales ---
@@ -40,25 +40,24 @@ export default function RegisterPage() {
 
     // --- Llamada al Backend ---
     setCargando(true);
-    setMensaje(""); // Limpiar mensajes previos
+    setMensaje(""); 
 
-    // Llamamos a la función register del AuthContext
-    // Esta función llama al authService -> API -> Backend MongoDB
+
     const resultado = await register(nombre, correo, contra, pais);
 
     setCargando(false);
 
     if (resultado.success) {
-      // ÉXITO
+
       setEsError(false);
       setMensaje("✅ ¡Registro exitoso! Redirigiendo...");
       
-      // Esperamos 1.5 segundos y redirigimos al Home (ya logueado)
+
       setTimeout(() => {
         navigate('/');
       }, 1500);
     } else {
-      // ERROR (Ej: "El usuario ya existe")
+
       setEsError(true);
       setMensaje(`❌ ${resultado.message}`);
     }

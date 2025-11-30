@@ -1,4 +1,4 @@
-// src/services/authService.js
+
 
 const API_BASE_URL = 'http://localhost:4000/api/auth';
 
@@ -43,7 +43,7 @@ export const changePassword = async (passwords, authHeader) => {
             'Content-Type': 'application/json',
             ...authHeader
         },
-        body: JSON.stringify(passwords), // { oldPassword, newPassword }
+        body: JSON.stringify(passwords), 
     });
 
     const data = await response.json();

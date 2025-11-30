@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import ProductList from '../components/ProductList'; // Reutilizamos tu lista de productos
+import ProductList from '../components/ProductList'; 
 import { fetchProducts } from '../services/productService';
 
-// Imagen de banner para la sección de ofertas
+
 const offerBanner = "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=2070&auto=format&fit=crop";
 
 export default function OffersPage() {
@@ -15,16 +15,14 @@ export default function OffersPage() {
       try {
         const allProducts = await fetchProducts();
         
-        // --- LÓGICA DE "OFERTAS REALES" ---
-        // Filtramos productos que cumplan criterio de oferta:
-        // Ej: Precio menor a 300 soles O que sean Coleccionables/Periféricos
+
         const deals = allProducts.filter(product => 
             product.price < 300 || 
             product.category?.name === 'Periféricos' ||
             product.category?.name === 'Coleccionables'
         );
         
-        // Opcional: Mezclar los resultados para que varíen
+
         setOfferProducts(deals.sort(() => 0.5 - Math.random()));
         
       } catch (error) {
@@ -56,7 +54,7 @@ export default function OffersPage() {
       textTransform: 'uppercase',
       letterSpacing: '2px',
       margin: 0,
-      color: '#ffeb3b', // Amarillo oferta
+      color: '#ffeb3b', 
       textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
     },
     heroSubtitle: {
@@ -72,7 +70,7 @@ export default function OffersPage() {
 
   return (
     <div>
-      {/* Banner de Cabecera */}
+
       <div style={styles.hero}>
         <div>
           <h1 style={styles.heroTitle}>Flash Sale 🔥</h1>
@@ -91,7 +89,7 @@ export default function OffersPage() {
               Encontramos <strong>{offerProducts.length}</strong> productos en promoción hoy:
             </div>
             
-            {/* Reutilizamos tu componente ProductList que ya funciona perfecto */}
+
             <ProductList products={offerProducts} />
           </>
         )}

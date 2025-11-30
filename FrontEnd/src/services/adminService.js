@@ -1,11 +1,11 @@
-// frontend/src/services/adminService.js
+
 
 const API_BASE_URL = 'http://localhost:4000/api';
 
 
-// ---------------------------------------------
+
 // 1. FUNCIONES PARA CATEGORIES
-// ---------------------------------------------
+
 
 export const createCategory = async (categoryData, authHeader) => {
     const response = await fetch(`${API_BASE_URL}/categories`, {
@@ -52,9 +52,9 @@ export const deleteCategory = async (categoryId, authHeader) => {
 };
 
 
-// ---------------------------------------------
+
 // 2. FUNCIONES PARA PRODUCTS
-// ---------------------------------------------
+
 
 export const createProduct = async (productData, authHeader) => {
     const response = await fetch(`${API_BASE_URL}/products`, {
@@ -97,9 +97,9 @@ export const deleteProduct = async (productId, authHeader) => {
 };
 
 
-// ---------------------------------------------
+
 // 3. FUNCIONES PARA ORDERS (ADMIN)
-// ---------------------------------------------
+
 
 export const fetchAllOrdersAdmin = async (authHeader) => {
     const response = await fetch(`${API_BASE_URL}/orders/admin`, {
@@ -113,12 +113,12 @@ export const fetchAllOrdersAdmin = async (authHeader) => {
     return response.json();
 };
 
-// ---------------------------------------------
+
 // 4. FUNCIONES PARA USUARIOS (ADMIN)
-// ---------------------------------------------
+
 
 export const fetchUsers = async (authHeader) => {
-    // Llama al nuevo endpoint que creamos
+
     const response = await fetch(`${API_BASE_URL}/auth/admin/users`, {
         headers: authHeader
     });
@@ -127,7 +127,7 @@ export const fetchUsers = async (authHeader) => {
 };
 
 export const updateBlockStatus = async (userId, isBlocked, authHeader) => {
-    // Llama a la ruta PUT /api/auth/:id/block
+
     const response = await fetch(`${API_BASE_URL}/auth/${userId}/block`, {
         method: 'PUT',
         headers: {

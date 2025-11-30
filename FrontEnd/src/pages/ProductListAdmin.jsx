@@ -4,7 +4,6 @@ import Pagination from '../components/Pagination';
 import AddProductForm from '../components/AddProductForm';
 import { useAuth } from '../context/AuthContext';
 import { fetchProducts } from '../services/productService';
-// Importamos correctamente las funciones del servicio
 import { deleteProduct, createProduct, updateProduct } from '../services/adminService'; 
 
 export default function ProductListAdmin() {
@@ -15,7 +14,7 @@ export default function ProductListAdmin() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     
-    // Estado para editar
+
     const [editingProduct, setEditingProduct] = useState(null);
 
     const loadProducts = async () => {
@@ -27,15 +26,15 @@ export default function ProductListAdmin() {
 
     useEffect(() => { loadProducts(); }, []);
 
-    // Función unificada para Guardar
+
     const handleSaveProduct = async (productData) => {
         try {
-            // Validación básica de tipos
+
             const payload = {
                 ...productData,
                 price: parseFloat(productData.price),
                 stock: parseInt(productData.stock, 10),
-                // Aseguramos que categoryId se envíe, no el objeto entero
+
                 categoryId: productData.categoryId || productData.category?._id
             };
 
@@ -64,8 +63,7 @@ export default function ProductListAdmin() {
     };
 
     const handleOpenEdit = (product) => {
-        // Preparamos el objeto para el formulario
-        // Aseguramos que category sea accesible para que el select lo tome
+
         setEditingProduct(product); 
         setIsModalOpen(true);
     };

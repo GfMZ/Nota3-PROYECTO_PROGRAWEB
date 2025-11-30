@@ -1,5 +1,5 @@
 import React from 'react';
-import Productos from '../components/Productos'; // El catálogo dinámico real
+import Productos from '../components/Productos'; 
 
 export default function ProductsPage() {
   return (

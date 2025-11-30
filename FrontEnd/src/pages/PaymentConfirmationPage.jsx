@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { useAuth } from '../context/AuthContext'; // 1. Importar AuthContext
+import { useAuth } from '../context/AuthContext'; 
 import OrderSummary from '../components/OrderSummary';
 import qrCodeImage from '../img/qr_scan_me.jpg';
 import { createOrder } from '../services/orderService';
@@ -9,7 +9,7 @@ import { createOrder } from '../services/orderService';
 export default function PaymentConfirmationPage() {
   const { method } = useParams();
   const { cart, totalPrice, shippingAddress, clearCart } = useCart();
-  const { getAuthHeader, user } = useAuth(); // 2. Obtener getAuthHeader
+  const { getAuthHeader, user } = useAuth(); 
   const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState(300);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -69,7 +69,7 @@ export default function PaymentConfirmationPage() {
     }
   };
 
-  // ... (El JSX de renderQRView y return se mantienen igual) ...
+
   const renderQRView = () => (
     <div style={{ textAlign: 'center' }}>
       <h2>Escanear QR</h2>
