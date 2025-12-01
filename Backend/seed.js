@@ -3,11 +3,11 @@
 import sequelize from './src/Config/database.js';
 
 
-import Category from './src/models/Categories.js';
-import Product from './src/models/Products.js';
-import User from './src/models/Users.js';
-import Cart from './src/models/Cart.js';  
-import Order from './src/models/Order.js'; archivo
+import Category from './src/Models/Categories.js';
+import Product from './src/Models/Products.js';
+import User from './src/Models/Users.js';
+import Cart from './src/Models/Cart.js';  
+import Order from './src/Models/Order.js'; archivo
 
 const seedDatabase = async () => {
   try {

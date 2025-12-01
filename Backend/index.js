@@ -6,11 +6,11 @@ import dotenv from 'dotenv';
 import sequelize from './src/Config/database.js';
 
 
-import './src/models/Users.js';      
-import './src/models/Categories.js'; 
-import './src/models/Products.js';   
-import './src/models/Cart.js';
-import './src/models/Order.js';
+import './src/Models/Users.js';      
+import './src/Models/Categories.js'; 
+import './src/Models/Products.js';   
+import './src/Models/Cart.js';
+import './src/Models/Order.js';
 
 // Rutas
 import authRoutes from './src/routes/authRoutes.js';

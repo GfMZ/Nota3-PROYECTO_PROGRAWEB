@@ -1,12 +1,12 @@
 // backend/controllers/orderController.js
 
-import Order, { OrderItem } from '../models/Order.js';
-import Cart, { CartItem } from '../models/Cart.js';
-import User from '../models/Users.js';
+import Order, { OrderItem } from '../Models/Order.js';
+import Cart, { CartItem } from '../Models/Cart.js';
+import User from '../Models/Users.js';
 
 // --- IMPORTANTE: ESTOS ERAN LOS QUE FALTABAN ---
-import Product from '../models/Products.js';
-import Category from '../models/Categories.js'; 
+import Product from '../Models/Products.js';
+import Category from '../Models/Categories.js'; 
 // -----------------------------------------------
 
 export const createOrder = async (req, res) => {
