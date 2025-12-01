@@ -1,6 +1,6 @@
-import Cart from '../Models/Cart';
-import { CartItem } from '../Models/Cart';
-import Product from '../Models/CartProducts.js.js'; 
+import Cart from '../dbModels/Cart';
+import { CartItem } from '../dbModels/Cart';
+import Product from '../dbModels/CartProducts.js.js.js'; 
 
 export const getUserCart = async (req, res) => {
   try {
