@@ -1,4 +1,4 @@
-import User from '../Models/Users.js';
+import User from '../models/Users.js';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import { Op } from 'sequelize';
