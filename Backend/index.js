@@ -51,5 +51,6 @@ const startServer = async () => {
     console.error('❌ Error de base de datos:', error);
   }
 };
+export default app;
 
 startServer();
